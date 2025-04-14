@@ -90,9 +90,14 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gray-950 text-gray-200 bg-[url('/dynamic-background.jpg')] bg-cover bg-center bg-no-repeat bg-fixed;
   }
 }
 
 @import '@rainbow-me/rainbowkit/styles.css';
 @import '@coinbase/onchainkit/styles.css';
+
+/* Override OnchainKit wallet button styles for dark theme */
+.ockConnectWallet_Container {
+  @apply bg-gray-800/60 hover:bg-gray-700/60 text-white border border-gray-700/50;
+}

@@ -20,20 +20,20 @@ import {
 type WalletWrapperParams = {
   text?: string;
   className?: string;
-  withWalletAggregator?: boolean; // We'll keep this in the type but not pass it to ConnectWallet
+  withWalletAggregator?: boolean;
 };
 
 export default function WalletWrapper({
   className,
   text,
-  withWalletAggregator = false, // Keep for backward compatibility but don't use it
+  withWalletAggregator = false,
 }: WalletWrapperParams) {
   return (
     <>
       <Wallet>
         <ConnectWallet
           text={text}
-          className={className}
+          className={`bg-gray-800/60 hover:bg-gray-700/60 text-white border border-gray-700/50 ${className || ''}`}
         >
           <Avatar className="h-6 w-6" />
           <Name />
