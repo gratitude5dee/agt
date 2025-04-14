@@ -50,7 +50,7 @@ describe('WalletWrapper', () => {
       }),
     });
   });
-  it('should render', () => {
+  it('should renders', () => {
     renderWithProviders(WalletWrapper);
     const wallet = screen.getByTestId('ockConnectWallet_Container');
     expect(wallet).toBeInTheDocument();

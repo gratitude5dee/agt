@@ -1,8 +1,15 @@
 
+import react from '@vitejs/plugin-react-swc';
+import path from 'path';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  plugins: [react()],
   test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts'],
+    exclude: ['**/node_modules/**', '.next/**', 'public/**'],
     coverage: {
       exclude: [
         '**.js',
@@ -22,9 +29,10 @@ export default defineConfig({
         lines: 50,
       },
     },
-    environment: 'jsdom',
-    exclude: ['**/node_modules/**', '.next/**', 'public/**'],
-    setupFiles: ['./vitest.setup.ts'],
-    globals: true,
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
   },
 });
