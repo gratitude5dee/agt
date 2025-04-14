@@ -7,7 +7,7 @@ export default function LoginButton() {
     <WalletWrapper
       className="min-w-[90px]"
       text="Log in"
-      withWalletAggregator={true}
+      // Removed withWalletAggregator prop as it's not supported
     />
   );
 }

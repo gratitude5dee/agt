@@ -9,16 +9,47 @@ import {
 import { useMemo } from 'react';
 import { http, createConfig } from 'wagmi';
 import { base, baseSepolia } from 'wagmi/chains';
+import { toast } from "@/components/ui/use-toast";
 
 export function useWagmiConfig() {
   const projectId = import.meta.env.VITE_WC_PROJECT_ID || '';
-  if (!projectId) {
-    const providerErrMessage =
-      'To connect to all Wallets you need to provide a VITE_WC_PROJECT_ID env variable';
-    console.warn(providerErrMessage);
-  }
-
+  
   return useMemo(() => {
+    if (!projectId) {
+      // Show a toast notification about the missing project ID
+      toast({
+        title: "WalletConnect Project ID Missing",
+        description: "Some wallet connection features may be limited. Please set VITE_WC_PROJECT_ID in your environment.",
+        variant: "destructive",
+      });
+
+      // Create a config with just Coinbase Wallet which doesn't require WalletConnect project ID
+      const connectors = connectorsForWallets(
+        [
+          {
+            groupName: 'Recommended Wallet',
+            wallets: [coinbaseWallet],
+          },
+        ],
+        {
+          appName: 'onchainkit',
+          projectId: 'DEMO', // Use a placeholder to avoid crashing
+        },
+      );
+
+      return createConfig({
+        chains: [base, baseSepolia],
+        multiInjectedProviderDiscovery: false,
+        connectors,
+        ssr: true,
+        transports: {
+          [base.id]: http(),
+          [baseSepolia.id]: http(),
+        },
+      });
+    }
+
+    // If project ID exists, use all wallets
     const connectors = connectorsForWallets(
       [
         {
@@ -36,9 +67,8 @@ export function useWagmiConfig() {
       },
     );
 
-    const wagmiConfig = createConfig({
+    return createConfig({
       chains: [base, baseSepolia],
-      // turn off injected provider discovery
       multiInjectedProviderDiscovery: false,
       connectors,
       ssr: true,
@@ -47,7 +77,5 @@ export function useWagmiConfig() {
         [baseSepolia.id]: http(),
       },
     });
-
-    return wagmiConfig;
   }, [projectId]);
 }

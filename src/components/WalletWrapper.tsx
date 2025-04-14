@@ -20,19 +20,18 @@ import {
 type WalletWrapperParams = {
   text?: string;
   className?: string;
-  withWalletAggregator?: boolean;
+  withWalletAggregator?: boolean; // We'll keep this in the type but not pass it to ConnectWallet
 };
 
 export default function WalletWrapper({
   className,
   text,
-  withWalletAggregator = false,
+  withWalletAggregator = false, // Keep for backward compatibility but don't use it
 }: WalletWrapperParams) {
   return (
     <>
       <Wallet>
         <ConnectWallet
-          withWalletAggregator={withWalletAggregator}
           text={text}
           className={className}
         >

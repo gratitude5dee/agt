@@ -5,6 +5,7 @@ import LoginButton from '@/components/LoginButton';
 import SignupButton from '@/components/SignupButton';
 import TransactionWrapper from '@/components/TransactionWrapper';
 import WalletWrapper from '@/components/WalletWrapper';
+import EnvVarsGuide from '@/components/EnvVarsGuide';
 import { ONCHAINKIT_LINK } from '@/links';
 import OnchainkitSvg from '@/svg/OnchainkitSvg';
 import { useAccount } from 'wagmi';
@@ -30,6 +31,9 @@ export default function Index() {
           </div>
         </div>
       </section>
+      
+      <EnvVarsGuide />
+      
       <section className="templateSection flex w-full flex-col items-center justify-center gap-4 rounded-xl bg-gray-100 px-2 py-4 md:grow">
         <div className="flex h-[450px] w-[450px] max-w-full items-center justify-center rounded-xl bg-[#030712]">
           <div className="rounded-xl bg-[#F3F4F6] px-4 py-[11px]">
