@@ -9,7 +9,60 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      mint_records: {
+        Row: {
+          contract_address: string
+          id: string
+          minted_at: string
+          token_id: string | null
+          transaction_hash: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          contract_address: string
+          id?: string
+          minted_at?: string
+          token_id?: string | null
+          transaction_hash: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          contract_address?: string
+          id?: string
+          minted_at?: string
+          token_id?: string | null
+          transaction_hash?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          updated_at: string
+          username: string | null
+          wallet_address: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          updated_at?: string
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+          username?: string | null
+          wallet_address?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
