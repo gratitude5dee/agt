@@ -37,7 +37,7 @@ export default function TransactionWrapper({ address }: { address: Address }) {
   };
 
   return (
-    <div className="flex w-full max-w-md">
+    <div className="flex w-full">
       <Transaction
         contracts={contracts}
         className="w-full"
@@ -45,7 +45,7 @@ export default function TransactionWrapper({ address }: { address: Address }) {
         onError={handleError}
         onSuccess={handleSuccess}
       >
-        <TransactionButton className="mt-0 mr-auto ml-auto w-full max-w-full text-white" />
+        <TransactionButton className="mt-0 mr-auto ml-auto w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium px-4 py-3 rounded-lg shadow-lg transition-all duration-300" />
         <TransactionStatus>
           <TransactionStatusLabel />
           <TransactionStatusAction />

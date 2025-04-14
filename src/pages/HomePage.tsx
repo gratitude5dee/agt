@@ -1,5 +1,12 @@
+
 import { ExternalLink, Sparkles, Wand2 } from 'lucide-react';
+import { useAccount } from 'wagmi';
+import TransactionWrapper from '@/components/TransactionWrapper';
+import WalletWrapper from '@/components/WalletWrapper';
+
 const HomePage = () => {
+  const { address } = useAccount();
+
   return <div className="flex flex-col items-center">
       {/* Page Title Section */}
       <div className="text-center mb-12 mt-8">
@@ -19,6 +26,18 @@ const HomePage = () => {
             <p className="text-gray-400">Advanced creative wizardry tools</p>
           </div>
         </div>
+      </div>
+      
+      {/* Transaction Section */}
+      <div className="w-full max-w-3xl mb-8">
+        {address ? (
+          <TransactionWrapper address={address} />
+        ) : (
+          <WalletWrapper
+            className="w-full"
+            text="Sign in to transact"
+          />
+        )}
       </div>
       
       {/* Middle Two Horizontal Cards */}
