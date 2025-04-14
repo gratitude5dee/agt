@@ -42,7 +42,7 @@ export default function TransactionWrapper({ address }: { address: Address }) {
     console.log('Transaction successful', response);
     toast({
       title: "Transaction Successful",
-      description: `Hash: ${response.hash?.slice(0, 10)}...`,
+      description: `Transaction completed successfully`,
     });
   };
 

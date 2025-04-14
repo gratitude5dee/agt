@@ -1,6 +1,5 @@
 
 'use client';
-import Footer from '@/components/Footer';
 import LoginButton from '@/components/LoginButton';
 import SignupButton from '@/components/SignupButton';
 import TransactionWrapper from '@/components/TransactionWrapper';
@@ -51,7 +50,6 @@ export default function Index() {
           />
         )}
       </section>
-      <Footer />
     </div>
   );
 }
