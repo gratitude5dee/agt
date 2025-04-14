@@ -2,25 +2,26 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { Routes, Route } from "react-router-dom";
+import Layout from "./Layout";
+import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
-import OnchainProviders from "./components/OnchainProviders";
+import AppProviders from "./components/AppProviders";
 
 const App = () => (
-  <OnchainProviders>
+  <AppProviders>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+        </Route>
+      </Routes>
     </TooltipProvider>
-  </OnchainProviders>
+  </AppProviders>
 );
 
 export default App;
