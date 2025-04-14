@@ -1,5 +1,7 @@
 
 import '@testing-library/jest-dom/vitest';
-// https://github.com/testing-library/jest-dom#with-vitest
+import { expect } from 'vitest';
+import * as matchers from '@testing-library/jest-dom/matchers';
 
-// Add global mocks if needed here
+// Extend Vitest's expect with jest-dom matchers
+expect.extend(matchers);
