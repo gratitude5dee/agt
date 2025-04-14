@@ -17,6 +17,7 @@ import {
   mintABI,
   mintContractAddress,
 } from '../constants';
+import { toast } from "@/components/ui/use-toast";
 
 export default function TransactionWrapper({ address }: { address: Address }) {
   const contracts = [
@@ -30,10 +31,19 @@ export default function TransactionWrapper({ address }: { address: Address }) {
 
   const handleError = (err: TransactionError) => {
     console.error('Transaction error:', err);
+    toast({
+      title: "Transaction Failed",
+      description: err.message || "An error occurred during the transaction",
+      variant: "destructive",
+    });
   };
 
   const handleSuccess = (response: TransactionResponse) => {
     console.log('Transaction successful', response);
+    toast({
+      title: "Transaction Successful",
+      description: `Hash: ${response.hash?.slice(0, 10)}...`,
+    });
   };
 
   return (
@@ -45,10 +55,10 @@ export default function TransactionWrapper({ address }: { address: Address }) {
         onError={handleError}
         onSuccess={handleSuccess}
       >
-        <TransactionButton className="mt-0 mr-auto ml-auto w-full max-w-full text-white" />
+        <TransactionButton className="w-full bg-blue-700 hover:bg-blue-800 text-white font-medium px-4 py-2 rounded-md" />
         <TransactionStatus>
-          <TransactionStatusLabel />
-          <TransactionStatusAction />
+          <TransactionStatusLabel className="text-gray-300" />
+          <TransactionStatusAction className="text-blue-500 hover:text-blue-400" />
         </TransactionStatus>
       </Transaction>
     </div>
