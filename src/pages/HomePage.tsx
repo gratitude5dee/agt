@@ -1,12 +1,10 @@
-
 import { ExternalLink, Sparkles, Wand2 } from 'lucide-react';
-
 const HomePage = () => {
-  return (
-    <div className="flex flex-col items-center">
+  return <div className="flex flex-col items-center">
       {/* Page Title Section */}
       <div className="text-center mb-12 mt-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">WZRD.tech Studio</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">VIBEZMASTER
+      </h1>
         <p className="text-gray-400 text-lg">Create magical digital experiences...</p>
       </div>
       
@@ -84,8 +82,6 @@ const HomePage = () => {
           <p className="text-gray-600 text-sm mt-1">Build interactive demos and prototypes quickly</p>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default HomePage;
