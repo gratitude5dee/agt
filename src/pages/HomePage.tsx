@@ -5,7 +5,7 @@ const HomePage = () => {
       <div className="text-center mb-12 mt-8">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">VIBEZMASTER
       </h1>
-        <p className="text-gray-400 text-lg">Create magical digital experiences...</p>
+        <p className="text-gray-400 text-lg">UniversalAI A&amp;R, Cultural Curator, &amp; Vibezmaster Extraordinare ...</p>
       </div>
       
       {/* Top Studio Card */}
