@@ -90,31 +90,9 @@
   }
 
   body {
-    @apply bg-gray-950 text-gray-200;
+    @apply bg-background text-foreground;
   }
 }
 
 @import '@rainbow-me/rainbowkit/styles.css';
 @import '@coinbase/onchainkit/styles.css';
-
-/* Dark theme base styles */
-html, body {
-  @apply bg-gray-950 text-gray-200 min-h-screen;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-gray-900;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-700 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-600;
-}
