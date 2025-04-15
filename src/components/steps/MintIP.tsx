@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { Key, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
+import { Key, ExternalLink, CheckCircle, AlertCircle, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { TransactionButton } from '@/components/TransactionWrapper';
 
 interface MintIPProps {
   songFile: File;
@@ -68,7 +69,7 @@ const MintIP: React.FC<MintIPProps> = ({ songFile, onComplete }) => {
           </div>
           <div>
             <h3 className="text-xl font-semibold text-white">Mint IP on Story Protocol</h3>
-            <p className="text-gray-400 text-sm">{getStatusMessage()}</p>
+            <p className="text-gray-400">{getStatusMessage()}</p>
           </div>
         </div>
 
@@ -145,12 +146,20 @@ const MintIP: React.FC<MintIPProps> = ({ songFile, onComplete }) => {
           )}
 
           {status === 'idle' && (
-            <Button
-              onClick={handleMint}
-              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 py-6 text-lg"
-            >
-              Mint on Story Protocol
-            </Button>
+            <div className="flex space-x-4">
+              <Button
+                onClick={handleMint}
+                className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 py-6 text-lg"
+              >
+                Mint on Story Protocol
+              </Button>
+              <TransactionButton 
+                className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 py-6 text-lg" 
+                withIcon={true}
+              >
+                <Wallet className="mr-2" /> Transact
+              </TransactionButton>
+            </div>
           )}
 
           {['preparing', 'waiting', 'mining'].includes(status) && (
