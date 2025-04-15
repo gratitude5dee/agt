@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./Layout";
 import HomePage from "./pages/HomePage";
+import AGTLandingPage from "./pages/AGTLandingPage";
 import NotFound from "./pages/NotFound";
 import AppProviders from "./components/AppProviders";
 
@@ -15,7 +16,8 @@ const App = () => (
       <Sonner />
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
+          <Route index element={<AGTLandingPage />} />
+          <Route path="/studio" element={<HomePage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Route>

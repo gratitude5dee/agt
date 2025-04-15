@@ -1,38 +1,49 @@
 
-import { Settings } from 'lucide-react';
-import { ONCHAINKIT_LINK } from '@/links';
-import OnchainkitSvg from '@/svg/OnchainkitSvg';
-import LoginButton from '@/components/LoginButton';
-import SignupButton from '@/components/SignupButton';
+import { Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import LoginButton from './LoginButton';
+import SignupButton from './SignupButton';
 
-export default function Header() {
+const Header = () => {
   const { address } = useAccount();
 
   return (
-    <header className="w-full flex justify-between items-center px-6 py-4 backdrop-blur-sm bg-gray-900/30">
-      <div className="flex items-center">
-        <a
-          href={ONCHAINKIT_LINK}
-          title="onchainkit"
-          target="_blank"
-          rel="noreferrer"
-          className="text-white"
-        >
-          <OnchainkitSvg />
-        </a>
-      </div>
-      
-      <div className="flex items-center gap-3">
-        <SignupButton />
-        {!address && <LoginButton />}
-        <button 
-          className="p-2 rounded-full hover:bg-gray-800/50 transition-colors"
-          aria-label="Settings"
-        >
-          <Settings className="text-gray-300" size={20} />
-        </button>
+    <header className="bg-gray-900/40 backdrop-blur-md border-b border-gray-800/50 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <div className="flex-shrink-0 flex items-center">
+              <Link to="/" className="font-bold text-xl text-white hover:text-purple-400 transition-colors">
+                AGENTS GOT TALENT
+              </Link>
+            </div>
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <Link
+                to="/"
+                className="border-transparent text-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+              >
+                Home
+              </Link>
+              <Link
+                to="/studio"
+                className="border-transparent text-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+              >
+                Studio
+              </Link>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <div className="flex items-center space-x-2">
+                <SignupButton />
+                {!address && <LoginButton />}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );
-}
+};
+
+export default Header;
