@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Key, ExternalLink, CheckCircle, AlertCircle, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TransactionButton } from '@/components/TransactionWrapper';
@@ -156,9 +156,8 @@ const MintIP: React.FC<MintIPProps> = ({ songFile, onComplete }) => {
               <TransactionButton 
                 className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 py-6 text-lg" 
                 withIcon={true}
-              >
-                <Wallet className="mr-2" /> Transact
-              </TransactionButton>
+                text="Transact"
+              />
             </div>
           )}
 
