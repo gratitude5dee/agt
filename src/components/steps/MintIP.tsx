@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Key, ExternalLink, CheckCircle, AlertCircle, Wallet } from 'lucide-react';
+import { Key, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { TransactionButton } from '@/components/TransactionWrapper';
+import { StandaloneTransactionButton } from '@/components/ui/transaction-button';
 
 interface MintIPProps {
   songFile: File;
@@ -17,6 +17,34 @@ const MintIP: React.FC<MintIPProps> = ({ songFile, onComplete }) => {
   const [error, setError] = useState<string | null>(null);
 
   const handleMint = () => {
+    setStatus('preparing');
+    
+    // Simulate preparing transaction
+    setTimeout(() => {
+      setStatus('waiting');
+      
+      // Simulate waiting for user confirmation
+      setTimeout(() => {
+        setStatus('mining');
+        
+        // Simulate transaction mining
+        setTimeout(() => {
+          // 90% chance of success
+          if (Math.random() > 0.1) {
+            setStatus('success');
+            setTxHash('0x' + Math.random().toString(16).substr(2, 64));
+            onComplete();
+          } else {
+            setStatus('error');
+            setError('Transaction was rejected by the network');
+          }
+        }, 3000);
+      }, 2000);
+    }, 1500);
+  };
+
+  const handleTransact = () => {
+    // Simulate a transaction process
     setStatus('preparing');
     
     // Simulate preparing transaction
@@ -153,7 +181,8 @@ const MintIP: React.FC<MintIPProps> = ({ songFile, onComplete }) => {
               >
                 Mint on Story Protocol
               </Button>
-              <TransactionButton 
+              <StandaloneTransactionButton 
+                onClick={handleTransact}
                 className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 py-6 text-lg" 
                 withIcon={true}
                 text="Transact"
