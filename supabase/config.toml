@@ -9,3 +9,6 @@ verify_jwt = true
 
 [functions.record-mint]
 verify_jwt = true
+
+[functions.evaluate-song]
+verify_jwt = false
