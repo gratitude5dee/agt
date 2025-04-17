@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Upload, Music, FileMusic, FileAudio, Mic } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
@@ -130,24 +131,40 @@ const UploadSong: React.FC<UploadSongProps> = ({ onComplete }) => {
                 Drag & Drop your audio file
               </h3>
               <TheatricalButton
-                variant="default"  // Changed from "primary" to "default"
-                className="mb-4 px-5 py-2 bg-gradient-to-r from-[#6C5CE7] to-[#6050DC] hover:from-[#7D6EF5] hover:to-[#6C5CE7] text-white border-none shadow-[0_4px_10px_rgba(108,92,231,0.3)] hover:shadow-[0_6px_15px_rgba(108,92,231,0.5)] transition-all duration-300 transform hover:translate-y-[-2px]"
+                variant="default"
+                className="group relative mb-4 px-6 py-2.5 
+                  bg-gradient-to-r from-premium-purple to-premium-navy hover:from-[#7d6ef5] hover:to-[#364a63]
+                  text-white font-medium tracking-wide
+                  border border-white/10 
+                  shadow-[0_4px_15px_rgba(108,92,231,0.2)]
+                  hover:shadow-[0_8px_25px_rgba(108,92,231,0.4)]
+                  hover:border-white/20
+                  hover:-translate-y-0.5
+                  transition-all duration-500
+                  overflow-hidden"
               >
-                <Upload className="mr-2 h-4 w-4" />
-                Browse files
+                <div className="relative z-10 flex items-center gap-2">
+                  <Upload className="w-4 h-4 transition-transform duration-500 group-hover:rotate-12" />
+                  <span>Browse files</span>
+                </div>
+                <div className="absolute inset-0 rounded-md overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#6C5CE7]/5 to-[#00D2FF]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute -inset-1 bg-gradient-to-r from-[#6C5CE7]/0 via-[#6C5CE7]/10 to-[#6C5CE7]/0 
+                    opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" />
+                </div>
               </TheatricalButton>
               <div className="flex items-center space-x-3 mb-2">
-                <div className="flex items-center px-3 py-1 rounded-full bg-gray-800/80 border border-gray-700/50">
-                  <FileMusic className="h-4 w-4 text-blue-400 mr-1" />
-                  <span className="text-xs text-gray-400">MP3</span>
+                <div className="flex items-center px-3 py-1.5 rounded-full bg-gray-800/80 border border-gray-700/50 transition-all duration-300 hover:bg-gray-700/80 hover:border-gray-600/50">
+                  <FileMusic className="h-4 w-4 text-[#00D2FF] mr-1.5" />
+                  <span className="text-xs font-medium text-gray-300">MP3</span>
                 </div>
-                <div className="flex items-center px-3 py-1 rounded-full bg-gray-800/80 border border-gray-700/50">
-                  <FileAudio className="h-4 w-4 text-green-400 mr-1" />
-                  <span className="text-xs text-gray-400">WAV</span>
+                <div className="flex items-center px-3 py-1.5 rounded-full bg-gray-800/80 border border-gray-700/50 transition-all duration-300 hover:bg-gray-700/80 hover:border-gray-600/50">
+                  <FileAudio className="h-4 w-4 text-[#FF00E5] mr-1.5" />
+                  <span className="text-xs font-medium text-gray-300">WAV</span>
                 </div>
-                <div className="flex items-center px-3 py-1 rounded-full bg-gray-800/80 border border-gray-700/50">
-                  <FileAudio className="h-4 w-4 text-purple-400 mr-1" />
-                  <span className="text-xs text-gray-400">FLAC</span>
+                <div className="flex items-center px-3 py-1.5 rounded-full bg-gray-800/80 border border-gray-700/50 transition-all duration-300 hover:bg-gray-700/80 hover:border-gray-600/50">
+                  <FileAudio className="h-4 w-4 text-[#6C5CE7] mr-1.5" />
+                  <span className="text-xs font-medium text-gray-300">FLAC</span>
                 </div>
               </div>
               <p className="text-gray-500 text-sm mt-2">
@@ -157,7 +174,6 @@ const UploadSong: React.FC<UploadSongProps> = ({ onComplete }) => {
           )}
         </div>
         
-        {/* Animated border */}
         {dragActive && (
           <div className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden">
             <div className="absolute inset-0 opacity-10 bg-noise"></div>
