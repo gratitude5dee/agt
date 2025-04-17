@@ -21,10 +21,10 @@ const Header = () => {
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-6">
-              <Link to="/" className="judge-nameplate inline-flex items-center px-3 pt-1 border-b-2 border-yellow-500 text-sm font-medium transition-all duration-300 hover:text-yellow-300 nameplate-shine py-[2px]">
+              <Link to="/" className="judge-nameplate inline-flex items-center px-3 pt-1 border-b-2 border-yellow-500 text-sm font-medium transition-all duration-300 hover:text-yellow-300 nameplate-shine py-[0px]">
                 Home
               </Link>
-              <Link to="/studio" className="judge-nameplate inline-flex items-center px-3 pt-1 border-b-2 border-transparent hover:border-purple-500 hover:text-white text-sm font-medium transition-all duration-300 nameplate-shine py-[2px]">
+              <Link to="/studio" className="judge-nameplate inline-flex items-center px-3 pt-1 border-b-2 border-transparent hover:border-purple-500 hover:text-white text-sm font-medium transition-all duration-300 nameplate-shine py-[0px]">
                 Studio
               </Link>
             </div>
