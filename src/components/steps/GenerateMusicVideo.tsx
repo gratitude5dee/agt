@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
-import { Film, Play } from 'lucide-react';
+import { Film, Play, Wand2, Sparkles } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import { TheatricalGlassCard } from '@/components/ui/theatrical-glass-card';
 
 interface GenerateMusicVideoProps {
   songFile: File;
@@ -13,6 +13,7 @@ const GenerateMusicVideo: React.FC<GenerateMusicVideoProps> = ({ songFile, onCom
   const [generating, setGenerating] = useState(true);
   const [progress, setProgress] = useState(0);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<'auto' | 'studio'>('auto');
 
   useEffect(() => {
     if (generating) {
@@ -35,14 +36,15 @@ const GenerateMusicVideo: React.FC<GenerateMusicVideoProps> = ({ songFile, onCom
   }, [generating, onComplete]);
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className="w-full max-w-xl mx-auto space-y-6">
+      {/* First Option - Auto Generation */}
       <div className="rounded-lg p-6 bg-gray-800/70 backdrop-blur-sm border border-gray-700/50">
         <div className="flex items-center mb-4">
           <div className="p-3 bg-blue-600/80 rounded-full mr-4">
             <Film className="text-white" size={24} />
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-white">Music Video Generator</h3>
+            <h3 className="text-xl font-semibold text-white">AI Video Generator</h3>
             <p className="text-gray-400 text-sm">
               {generating 
                 ? "Creating a unique visual experience for your track..." 
@@ -99,6 +101,35 @@ const GenerateMusicVideo: React.FC<GenerateMusicVideoProps> = ({ songFile, onCom
           </div>
         )}
       </div>
+
+      {/* Second Option - Studio Card */}
+      <TheatricalGlassCard 
+        variant="primary"
+        gradient="primary"
+        glow="medium"
+        hover="raise"
+        beams={true}
+        noise={true}
+        innerGlow={true}
+        threed={true}
+        className="cursor-pointer transform transition-all duration-300 hover:scale-[1.02]"
+        onClick={() => setSelectedOption('studio')}
+      >
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-gradient-to-br from-[#6C5CE7] to-[#6050DC] rounded-full relative overflow-hidden group">
+            <Wand2 className="text-white relative z-10" size={24} />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#00D2FF] to-[#FF00E5] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#6C5CE7] to-[#FF00E5] opacity-0 group-hover:opacity-30 blur-md transition-opacity duration-500 rounded-full"></div>
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-white">Studio Mode</h2>
+            <p className="text-gray-400 tracking-wide">Advanced creative controls & manual editing</p>
+          </div>
+          <div className="ml-auto">
+            <Sparkles className="text-[#00D2FF] opacity-60 h-5 w-5 animate-pulse" />
+          </div>
+        </div>
+      </TheatricalGlassCard>
     </div>
   );
 };
