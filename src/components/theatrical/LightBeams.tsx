@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 interface LightBeamsProps {
@@ -66,7 +65,7 @@ const LightBeams: React.FC<LightBeamsProps> = ({
           ? `${Math.floor(index / 2) * (100 / (beamCount / 2))}%`
           : '0';
           
-        const height = agtStyle ? '200%' : '120%';
+        const height = agtStyle ? '300%' : '200%';
         
         const blurAmount = agtStyle ? '8px' : '5px';
         
@@ -122,11 +121,10 @@ const LightBeams: React.FC<LightBeamsProps> = ({
   }, [beamCount, animated, beamColors, intensity, agtStyle]);
 
   return (
-    <div className={`absolute inset-0 overflow-hidden led-panel ${className}`}>
+    <div className={`absolute inset-0 overflow-hidden w-full h-full led-panel ${className}`}>
       {beams}
       
       {agtStyle && (
-        // Add horizontal LED-like bands for the AGT stage look
         <>
           {Array.from({ length: 6 }).map((_, index) => (
             <div 
