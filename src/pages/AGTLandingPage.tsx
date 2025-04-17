@@ -97,66 +97,76 @@ const AGTLandingPage = () => {
   }];
   return <div className="min-h-screen flex flex-col">
       {/* Hero Section - The Main Stage */}
-      <section ref={heroRef} className="relative min-h-[90vh] w-full flex flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
+      <section ref={heroRef} className="relative min-h-[calc(100vh-3.5rem)] w-full flex flex-col items-center justify-center overflow-hidden">
         {/* Background light beams */}
-        <div className="absolute inset-0 bg-[#0A0A1A] z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[#0A0A1A] z-0">
           <LightBeams beamCount={24} intensity="high" agtStyle />
           <Spotlight x={spotlightPos.x} y={spotlightPos.y} size={500} intensity="high" pulsing />
           <Spotlight fixed x={window.innerWidth * 0.25} y={window.innerHeight * 0.3} size={400} opacity={0.15} color="27,117,188" />
           <Spotlight fixed x={window.innerWidth * 0.75} y={window.innerHeight * 0.4} size={400} opacity={0.15} color="227,25,55" />
         </div>
 
-        <div className="relative z-10 flex flex-col items-center text-center max-w-5xl">
+        <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto px-4 w-full">
           {/* Logo/Title with 3D effect */}
-          <div className="mb-6 lg:mb-10 animate-float">
-            <div className="flex items-center justify-center mb-2">
-              <Star className="h-12 w-12 text-yellow-500 animate-golden-pulse mr-2" />
+          <div className="mb-12 lg:mb-16 animate-float">
+            <div className="flex items-center justify-center mb-4">
+              <Star className="h-12 w-12 text-yellow-500 animate-golden-pulse mr-3" />
               <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
                 <TheatricalText variant="agt-title" letterSpacing="widest" className="font-extrabold" glow backlit>
                   AGENTS GOT TALENT
                 </TheatricalText>
               </h1>
             </div>
-            <p className="mt-2 text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-400 font-medium tracking-wide letter-spacing-widest">
+            <p className="mt-4 text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-400 font-medium tracking-wide letter-spacing-widest">
               Where Code Becomes Spectacle
             </p>
           </div>
 
-          {/* Vibezmaster character */}
-          <div className="w-full max-w-md h-64 md:h-80 relative mb-8 flex items-center justify-center">
+          {/* Vibezmaster character container */}
+          <div className="w-full max-w-2xl aspect-[16/9] relative mb-12 flex items-center justify-center">
+            {/* Purple glow effect */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-48 h-48 md:w-64 md:h-64 rounded-full bg-gradient-to-r from-indigo-600 to-purple-700 opacity-75 animate-pulse"></div>
-            </div>
-            <div className="z-10 p-6 rounded-full glass-effect judge-nameplate nameplate-shine border border-white/20 text-center transform hover:scale-105 transition-all duration-300">
-              <TheatricalText as="p" variant="agt-title" letterSpacing="widest" className="text-2xl font-semibold text-white">
-                VIBEZMASTER
-              </TheatricalText>
-              <TheatricalText as="p" variant="agt-subtitle" className="text-sm">A&amp;R, Cultural Curator, &amp; Agent-as-a-Judge
-            </TheatricalText>
+              <div className="w-64 h-64 rounded-full bg-gradient-to-r from-indigo-600/40 to-purple-700/40 blur-xl"></div>
             </div>
             
-            {/* Speech bubble for Vibez response */}
-            {vibezResponse && <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 max-w-xs glass-effect p-4 rounded-xl shadow-2xl animate-fade-in">
+            {/* Vibezmaster nameplate */}
+            <div className="z-10 py-8 px-12 rounded-xl glass-effect judge-nameplate nameplate-shine border border-white/20 text-center transform hover:scale-105 transition-all duration-300">
+              <TheatricalText as="p" variant="agt-title" letterSpacing="widest" className="text-3xl font-semibold mb-2">
+                VIBEZMASTER
+              </TheatricalText>
+              <TheatricalText as="p" variant="agt-subtitle" className="text-lg">
+                A&amp;R, Cultural Curator, &amp; Agent-as-a-Judge
+              </TheatricalText>
+            </div>
+
+            {/* Vibez response bubble */}
+            {vibezResponse && (
+              <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 max-w-xs glass-effect p-6 rounded-xl shadow-2xl animate-fade-in">
                 <div className="absolute bottom-0 left-6 transform translate-y-1/2 rotate-45 w-4 h-4 bg-gray-900/80 border-r border-b border-purple-500/50"></div>
-                <p className="text-white italic">"{vibezResponse}"</p>
-              </div>}
+                <p className="text-white italic text-lg leading-relaxed">"{vibezResponse}"</p>
+              </div>
+            )}
           </div>
 
-          {/* Access Vibez button with theatrical effect */}
-          <Link to="/studio" className="golden-buzzer px-10 py-5 rounded-lg text-xl font-bold tracking-wide flex items-center justify-center" onClick={handleAccessVibez}>
+          {/* Access Vibez button */}
+          <Link 
+            to="/studio" 
+            className="golden-buzzer px-12 py-6 rounded-lg text-xl font-bold tracking-wider flex items-center justify-center transform hover:scale-105 transition-all duration-300" 
+            onClick={handleAccessVibez}
+          >
             <span className="relative z-10 flex items-center uppercase tracking-widest">
               ACCESS VIBEZ
-              <Star className="ml-2 h-6 w-6" />
+              <Star className="ml-3 h-6 w-6" />
             </span>
           </Link>
         </div>
 
-        {/* 'X' markers in the background */}
-        <div className="absolute bottom-10 left-10 opacity-70">
-          <XMarker size={120} glowing agtStyle />
+        {/* X markers with adjusted positioning */}
+        <div className="absolute bottom-12 left-12 opacity-70">
+          <XMarker size={140} glowing agtStyle />
         </div>
-        <div className="absolute top-10 right-10 opacity-70">
-          <XMarker size={120} glowing agtStyle />
+        <div className="absolute top-12 right-12 opacity-70">
+          <XMarker size={140} glowing agtStyle />
         </div>
       </section>
 
@@ -301,4 +311,5 @@ const AGTLandingPage = () => {
       </footer>
     </div>;
 };
+
 export default AGTLandingPage;
