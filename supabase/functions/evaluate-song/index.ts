@@ -37,15 +37,15 @@ serve(async (req) => {
       new Uint8Array(audioBytes).reduce((data, byte) => data + String.fromCharCode(byte), '')
     );
 
-    // Initialize the Google GenAI client based on the example code
+    // Initialize the Gemini API client
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Configure the model options as shown in the example
+    // Get the model
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-pro-preview-03-25",
     });
     
-    // Define the system instruction
+    // Prepare the system instruction
     const systemInstruction = [
       {
         text: `You are Vibezmaster, a world-class music evaluation expert with extensive experience in the music industry as an A&R professional. Your task is to evaluate songs thoroughly and provide structured feedback in a consistent JSON format.
@@ -128,55 +128,67 @@ Remember that your evaluation will directly inform business decisions about whet
       }
     ];
 
-    // Create the request config
-    const config = {
-      responseMimeType: 'text/plain',
-      systemInstruction: systemInstruction,
-    };
-    
-    // Create content parts similar to the example
+    // Create the content parts
     const contents = [
       {
-        role: 'user',
+        role: "user",
         parts: [
-          {
-            text: "Evaluate this song based on your instructions.",
-          },
+          { text: "Evaluate this song based on your instructions." },
           {
             inlineData: {
               mimeType: audioMimeType,
               data: audioBase64
             }
           }
-        ],
-      },
+        ]
+      }
     ];
 
     console.log("Sending request to Gemini API...");
     
-    // Generate content as shown in the example
-    const response = await model.generateContentStream({
-      model: "gemini-2.5-pro-preview-03-25",
-      config: config,
-      contents: contents,
+    // Generate content - using correct structure for Gemini API
+    const result = await model.generateContent({
+      contents,
+      generationConfig: {
+        temperature: 0.2,
+        topK: 32,
+        topP: 0.95,
+        maxOutputTokens: 8192,
+      },
+      safetySettings: [
+        {
+          category: "HARM_CATEGORY_HARASSMENT",
+          threshold: "BLOCK_ONLY_HIGH"
+        },
+        {
+          category: "HARM_CATEGORY_HATE_SPEECH",
+          threshold: "BLOCK_ONLY_HIGH"
+        },
+        {
+          category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+          threshold: "BLOCK_ONLY_HIGH"
+        },
+        {
+          category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+          threshold: "BLOCK_ONLY_HIGH"
+        }
+      ],
+      systemInstruction
     });
 
-    // Collect all chunks to build complete response
-    let fullResponse = "";
-    for await (const chunk of response) {
-      fullResponse += chunk.text();
-    }
+    // Get the response text
+    const responseText = result.response.text();
     console.log("Received response from Gemini API");
     
     // Extract JSON from response text
     // Sometimes Gemini wraps the JSON in markdown code blocks or adds extra text
     let jsonMatch;
-    if (fullResponse.includes('```json')) {
+    if (responseText.includes('```json')) {
       // Extract content between ```json and ``` markers
-      jsonMatch = fullResponse.match(/```json\s*([\s\S]*?)\s*```/);
-    } else if (fullResponse.includes('{')) {
+      jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
+    } else if (responseText.includes('{')) {
       // Try to extract anything that looks like a JSON object
-      jsonMatch = fullResponse.match(/{[\s\S]*}/);
+      jsonMatch = responseText.match(/{[\s\S]*}/);
     }
 
     if (!jsonMatch) {
