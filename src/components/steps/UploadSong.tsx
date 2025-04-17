@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { Upload, Music } from 'lucide-react';
+import { Upload, Music, FileMusic, FileAudio, Mic } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { TheatricalButton } from '@/components/ui/theatrical-button';
 
 interface UploadSongProps {
   onComplete: (file: File) => void;
@@ -69,11 +70,22 @@ const UploadSong: React.FC<UploadSongProps> = ({ onComplete }) => {
     }, 200);
   };
 
+  const getFileIcon = (mimetype: string) => {
+    if (mimetype.includes('mp3')) return <FileMusic className="h-5 w-5 text-blue-400" />;
+    if (mimetype.includes('wav')) return <FileAudio className="h-5 w-5 text-green-400" />;
+    return <FileAudio className="h-5 w-5 text-purple-400" />;
+  };
+
   return (
     <div className="w-full max-w-xl mx-auto">
       <div 
-        className={`relative border-2 border-dashed p-8 rounded-lg flex flex-col items-center justify-center min-h-[16rem] transition-colors
-          ${dragActive ? 'border-indigo-500 bg-indigo-500/10' : 'border-gray-700 bg-gray-800/50'}`}
+        className={`
+          relative transition-all duration-300 rounded-xl
+          ${dragActive 
+            ? 'border-[3px] border-dashed border-[#6C5CE7] bg-indigo-500/10 shadow-[0_0_20px_rgba(108,92,231,0.3)]' 
+            : 'border-2 border-dashed border-gray-700 bg-gray-800/50'
+          }
+        `}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
@@ -88,37 +100,71 @@ const UploadSong: React.FC<UploadSongProps> = ({ onComplete }) => {
           disabled={uploading}
         />
         
-        <div className="flex flex-col items-center text-center pointer-events-none">
+        <div className="flex flex-col items-center text-center pointer-events-none p-8 min-h-[16rem] justify-center">
           {uploading ? (
             <>
-              <div className="w-16 h-16 mb-4 rounded-full bg-indigo-600/20 flex items-center justify-center">
-                <Music className="h-8 w-8 text-indigo-400 animate-pulse" />
+              <div className="w-16 h-16 mb-4 rounded-full bg-indigo-600/20 flex items-center justify-center relative overflow-hidden">
+                <Music className="h-8 w-8 text-indigo-400 animate-pulse relative z-10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#00D2FF]/20 to-[#FF00E5]/20 animate-pulse"></div>
               </div>
-              <h3 className="text-xl font-medium text-white mb-2">
+              <h3 className="text-xl font-medium text-white mb-4 tracking-wide">
                 Uploading your track...
               </h3>
-              <div className="w-full max-w-md mb-2">
-                <Progress value={progress} className="h-2 bg-gray-700" />
+              <div className="w-full max-w-md mb-3 relative">
+                <div className="h-1 w-full bg-gray-700 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-[#6C5CE7] to-[#00D2FF] rounded-full transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                <div className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gradient-to-r from-[#6C5CE7]/0 via-[#6C5CE7]/30 to-[#6C5CE7]/0 blur-[2px]"></div>
               </div>
               <p className="text-gray-400">{Math.round(progress)}% complete</p>
             </>
           ) : (
             <>
-              <div className="w-16 h-16 mb-4 rounded-full bg-gray-700 flex items-center justify-center">
-                <Upload className="h-8 w-8 text-gray-400" />
+              <div className="w-20 h-20 mb-6 rounded-full bg-gradient-to-br from-[#2D3748] to-[#1A202C] flex items-center justify-center relative group overflow-hidden shadow-[0_0_20px_rgba(108,92,231,0.2)]">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#6C5CE7]/0 to-[#6C5CE7]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <Mic className="h-8 w-8 text-[#6C5CE7] group-hover:text-white transition-all duration-300 transform group-hover:scale-110" />
               </div>
-              <h3 className="text-xl font-medium text-white mb-2">
+              <h3 className="text-xl font-medium text-white mb-3 tracking-wide group-hover:text-[#6C5CE7]">
                 Drag & Drop your audio file
               </h3>
-              <p className="text-gray-400 mb-4">
-                or click to browse your files
-              </p>
-              <p className="text-gray-500 text-sm">
-                Supports MP3, WAV, FLAC (max 50MB)
+              <TheatricalButton
+                variant="primary"
+                className="mb-4 px-5 py-2 bg-gradient-to-r from-[#6C5CE7] to-[#6050DC] hover:from-[#7D6EF5] hover:to-[#6C5CE7] text-white border-none shadow-[0_4px_10px_rgba(108,92,231,0.3)] hover:shadow-[0_6px_15px_rgba(108,92,231,0.5)] transition-all duration-300 transform hover:translate-y-[-2px]"
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                Browse files
+              </TheatricalButton>
+              <div className="flex items-center space-x-3 mb-2">
+                <div className="flex items-center px-3 py-1 rounded-full bg-gray-800/80 border border-gray-700/50">
+                  <FileMusic className="h-4 w-4 text-blue-400 mr-1" />
+                  <span className="text-xs text-gray-400">MP3</span>
+                </div>
+                <div className="flex items-center px-3 py-1 rounded-full bg-gray-800/80 border border-gray-700/50">
+                  <FileAudio className="h-4 w-4 text-green-400 mr-1" />
+                  <span className="text-xs text-gray-400">WAV</span>
+                </div>
+                <div className="flex items-center px-3 py-1 rounded-full bg-gray-800/80 border border-gray-700/50">
+                  <FileAudio className="h-4 w-4 text-purple-400 mr-1" />
+                  <span className="text-xs text-gray-400">FLAC</span>
+                </div>
+              </div>
+              <p className="text-gray-500 text-sm mt-2">
+                Maximum file size: 50MB
               </p>
             </>
           )}
         </div>
+        
+        {/* Animated border */}
+        {dragActive && (
+          <div className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden">
+            <div className="absolute inset-0 opacity-10 bg-noise"></div>
+            <div className="absolute inset-[-2px] rounded-xl border-[3px] border-[#6C5CE7]/30 animate-pulse"></div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -69,7 +69,19 @@ export default {
 					red: 'hsl(var(--agt-red))',
 					blue: 'hsl(var(--agt-blue))',
 					gold: 'hsl(var(--agt-gold))',
-				}
+				},
+				// Premium UI color scheme
+				premium: {
+					purple: '#6C5CE7',
+					navy: '#2D3748',
+					dark: '#1A1F2C',
+					'electric-blue': '#00D2FF',
+					magenta: '#FF00E5',
+					charcoal: '#221F26',
+					'sky-blue': '#33C3F0',
+					gray: '#8E9196',
+					'cool-gray': '#aaadb0',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -96,14 +108,46 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-glow': {
+					'0%, 100%': { 
+						opacity: '0.6',
+						boxShadow: '0 0 15px rgba(108, 92, 231, 0.5)' 
+					},
+					'50%': { 
+						opacity: '1',
+						boxShadow: '0 0 25px rgba(108, 92, 231, 0.8)' 
+					}
+				},
+				'float': {
+					'0%, 100%': {
+						transform: 'translateY(0)'
+					},
+					'50%': {
+						transform: 'translateY(-10px)'
+					}
+				},
+				'beam': {
+					'0%': {
+						transform: 'translateX(-100%)'
+					},
+					'100%': {
+						transform: 'translateX(100%)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				'float': 'float 6s ease-in-out infinite',
+				'beam': 'beam 8s ease-in-out infinite'
 			},
 			backgroundImage: {
-        'led-pattern': "repeating-linear-gradient(0deg, rgba(27, 117, 188, 0.1) 0px, rgba(27, 117, 188, 0.05) 1px, transparent 1px, transparent 2px), repeating-linear-gradient(90deg, rgba(27, 117, 188, 0.1) 0px, rgba(27, 117, 188, 0.05) 1px, transparent 1px, transparent 2px)"
+        'led-pattern': "repeating-linear-gradient(0deg, rgba(27, 117, 188, 0.1) 0px, rgba(27, 117, 188, 0.05) 1px, transparent 1px, transparent 2px), repeating-linear-gradient(90deg, rgba(27, 117, 188, 0.1) 0px, rgba(27, 117, 188, 0.05) 1px, transparent 1px, transparent 2px)",
+				'noise-pattern': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+				'gradient-primary': 'linear-gradient(to right, #6C5CE7, #6050DC)',
+				'gradient-accent': 'linear-gradient(to right, #00D2FF, #FF00E5)',
       }
 		}
 	},

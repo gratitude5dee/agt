@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Wand2, ArrowLeft } from 'lucide-react';
+import { Wand2, ArrowLeft, Mic, Sparkles } from 'lucide-react';
 import { useAccount } from 'wagmi';
 import { useNavigate } from 'react-router-dom';
 import WalletWrapper from '@/components/WalletWrapper';
@@ -9,6 +10,9 @@ import GenerateVibezReport from '@/components/steps/GenerateVibezReport';
 import GenerateMusicVideo from '@/components/steps/GenerateMusicVideo';
 import MintIP from '@/components/steps/MintIP';
 import { TheatricalButton } from '@/components/ui/theatrical-button';
+import { TheatricalGlassCard } from '@/components/ui/theatrical-glass-card';
+import { TheatricalText } from '@/components/ui/theatrical-text';
+import LightBeams from '@/components/theatrical/LightBeams';
 
 type Step = {
   id: number;
@@ -105,43 +109,82 @@ const HomePage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center relative">
+      {/* Background light effects */}
+      <div className="fixed inset-0 z-0 opacity-30 pointer-events-none">
+        <LightBeams beamCount={8} intensity="low" agtStyle={false} />
+      </div>
+      
       {/* Back Button */}
-      <div className="self-start mb-6">
+      <div className="self-start mb-6 z-10">
         <TheatricalButton 
           variant="default"
-          className="px-4 py-2 text-white hover:text-gray-200 transition-colors glassmorphism"
+          className="px-4 py-2 text-white hover:text-gray-200 transition-all duration-300 backdrop-blur-md bg-gray-800/30 border border-gray-700/30 shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:scale-105 hover:shadow-[0_0_20px_rgba(108,92,231,0.3)]"
           onClick={() => navigate('/')}
         >
-          <ArrowLeft className="mr-2" />
+          <ArrowLeft className="mr-2 transition-transform group-hover:-translate-x-1" />
           Back to Home
         </TheatricalButton>
       </div>
 
       {/* Page Title Section */}
-      <div className="text-center mb-12 mt-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">VIBEZMASTER</h1>
-        <p className="text-gray-400 text-lg">UniversalAI A&amp;R, Cultural Curator, &amp; Vibezmaster Extraordinare ...</p>
+      <div className="text-center mb-12 mt-8 z-10">
+        <TheatricalText 
+          as="h1" 
+          variant="agt-title"
+          glow={true}
+          letterSpacing="wider" 
+          className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-white via-indigo-200 to-purple-200 bg-clip-text text-transparent"
+        >
+          VIBEZMASTER
+        </TheatricalText>
+        <p className="text-gray-400 text-lg tracking-wide relative overflow-hidden">
+          <span className="relative inline-block after:content-[''] after:absolute after:w-full after:h-0.5 after:bottom-0 after:left-0 after:bg-gradient-to-r after:from-[#00D2FF] after:to-[#FF00E5] after:scale-x-0 after:animate-[pulse_4s_ease-in-out_infinite]">
+            UniversalAI A&amp;R, Cultural Curator, &amp; Vibezmaster Extraordinare ...
+          </span>
+        </p>
       </div>
       
       {/* Top Studio Card */}
-      <div className="w-full max-w-3xl bg-gray-800/50 backdrop-blur-md rounded-lg p-4 mb-8 border border-gray-700/30">
+      <TheatricalGlassCard 
+        variant="primary"
+        gradient="primary"
+        glow="medium"
+        hover="raise"
+        beams={true}
+        noise={true}
+        innerGlow={true}
+        threed={true}
+        className="w-full max-w-3xl mb-8 z-10"
+      >
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-indigo-600 rounded-full">
-            <Wand2 className="text-white" size={24} />
+          <div className="p-3 bg-gradient-to-br from-[#6C5CE7] to-[#6050DC] rounded-full relative overflow-hidden group">
+            <Wand2 className="text-white relative z-10" size={24} />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#00D2FF] to-[#FF00E5] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#6C5CE7] to-[#FF00E5] opacity-0 group-hover:opacity-30 blur-md transition-opacity duration-500 rounded-full"></div>
           </div>
           <div>
             <h2 className="text-xl font-semibold text-white">Studio</h2>
-            <p className="text-gray-400">Advanced creative wizardry tools</p>
+            <p className="text-gray-400 tracking-wide">Advanced creative wizardry tools</p>
+          </div>
+          <div className="ml-auto">
+            <Sparkles className="text-[#00D2FF] opacity-60 h-5 w-5 animate-pulse" />
           </div>
         </div>
-      </div>
+      </TheatricalGlassCard>
       
       {/* Multi-step Creation Flow */}
-      <div className="w-full max-w-3xl bg-gray-800/30 backdrop-blur-md rounded-lg p-6 mb-8 border border-gray-700/20">
+      <TheatricalGlassCard 
+        variant="default"
+        gradient="subtle"
+        glow="subtle"
+        size="default"
+        className="w-full max-w-3xl mb-8 z-10"
+        noise={true}
+      >
         {address && <StepIndicator steps={steps} currentStep={currentStepIndex + 1} />}
         {renderCurrentStep()}
-      </div>
+      </TheatricalGlassCard>
     </div>
   );
 };

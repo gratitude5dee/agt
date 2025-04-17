@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -503,4 +502,160 @@
 /* Override OnchainKit wallet button styles for dark theme */
 .ockConnectWallet_Container {
   @apply bg-gray-800/60 hover:bg-gray-700/60 text-white border border-gray-700/50;
+}
+
+/* New keyframes for animations */
+@keyframes beam {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes audio-wave {
+  0%, 100% {
+    clip-path: polygon(
+      0% 50%,
+      25% 40%,
+      50% 60%,
+      75% 30%,
+      100% 50%
+    );
+  }
+  50% {
+    clip-path: polygon(
+      0% 50%,
+      25% 60%,
+      50% 40%,
+      75% 70%,
+      100% 50%
+    );
+  }
+}
+
+/* Custom noise background */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.glassmorphism {
+  @apply backdrop-blur-md bg-gray-800/30 border border-gray-700/30 shadow-[0_4px_12px_rgba(0,0,0,0.3)];
+}
+
+/* Premium card styling */
+.premium-card {
+  @apply backdrop-blur-md bg-gray-900/40 border border-gray-800/50 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)];
+  background-image: linear-gradient(to bottom right, rgba(45, 55, 72, 0.5), rgba(26, 32, 44, 0.8));
+}
+
+/* Glow effect classes */
+.glow-text {
+  text-shadow: 0 0 5px rgba(108, 92, 231, 0.5);
+}
+
+.glow-border {
+  box-shadow: 0 0 5px rgba(108, 92, 231, 0.3), inset 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+.glow-purple {
+  filter: drop-shadow(0 0 5px rgba(108, 92, 231, 0.5));
+}
+
+.glow-blue {
+  filter: drop-shadow(0 0 5px rgba(0, 210, 255, 0.5));
+}
+
+.glow-magenta {
+  filter: drop-shadow(0 0 5px rgba(255, 0, 229, 0.5));
+}
+
+/* Gradient text classes */
+.text-gradient-primary {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(to right, #6C5CE7, #8E74FF);
+}
+
+.text-gradient-accent {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(to right, #00D2FF, #FF00E5);
+}
+
+/* Button animations */
+@keyframes button-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(108, 92, 231, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(108, 92, 231, 0.7);
+  }
+}
+
+.button-pulse {
+  animation: button-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Updated hover animation for music controls */
+.hover-scale {
+  @apply transition-transform duration-300;
+}
+.hover-scale:hover {
+  @apply scale-110;
+}
+
+/* Audio visualizer animation for decorative elements */
+.visualizer-bar {
+  @apply bg-gradient-to-t from-[#6C5CE7] to-[#00D2FF];
+  animation: visualizer-animation 1.2s ease-in-out infinite;
+}
+
+@keyframes visualizer-animation {
+  0%, 100% {
+    height: 30%;
+  }
+  50% {
+    height: 100%;
+  }
+}
+
+.visualizer-container {
+  @apply flex items-end space-x-1 h-8;
+}
+
+.visualizer-container div:nth-child(1) { animation-delay: 0.0s; }
+.visualizer-container div:nth-child(2) { animation-delay: 0.2s; }
+.visualizer-container div:nth-child(3) { animation-delay: 0.1s; }
+.visualizer-container div:nth-child(4) { animation-delay: 0.3s; }
+.visualizer-container div:nth-child(5) { animation-delay: 0.2s; }
+
+/* Extend Tailwind utility classes for premium UI */
+.bg-premium-dark {
+  background-color: #1A1F2C;
+}
+
+.bg-premium-gradient {
+  background-image: linear-gradient(to bottom right, #2D3748, #1A1F2C);
+}
+
+.border-glow {
+  @apply border border-indigo-500/20;
+  box-shadow: 0 0 15px rgba(108, 92, 231, 0.2), inset 0 0 5px rgba(108, 92, 231, 0.1);
+}
+
+.text-shadow-sm {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Corner radius system */
+.rounded-premium-lg {
+  border-radius: 12px;
+}
+
+.rounded-premium-md {
+  border-radius: 8px;
+}
+
+.rounded-premium-sm {
+  border-radius: 4px;
 }
