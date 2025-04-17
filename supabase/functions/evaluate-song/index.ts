@@ -80,7 +80,48 @@ serve(async (req) => {
    - Commercial Potential: Brief assessment of market viability
    - Target Audience: Description of ideal listener demographic
 
-7. FORMAT your entire response as a valid JSON object exactly as specified.`
+7. FORMAT your entire response as a valid JSON object with the following structure:
+
+\`\`\`json
+{
+  "evaluation": {
+    "scores": {
+      "authentic": 0,
+      "adventurous": 0,
+      "accurate": 0,
+      "artistic": 0,
+      "attentionGrabbing": 0,
+      "melodyQuality": 0,
+      "rhythmQuality": 0,
+      "harmonyQuality": 0,
+      "productionQuality": 0,
+      "aScore": 0.0,
+      "technicalScore": 0.0,
+      "finalScore": 0.0
+    },
+    "mintIP": "Yes/No",
+    "arReport": {
+      "executiveSummary": "",
+      "keyStrengths": ["", "", ""],
+      "improvementAreas": ["", "", ""],
+      "commercialPotential": "",
+      "targetAudience": ""
+    }
+  }
+}
+\`\`\`
+
+IMPORTANT GUIDELINES:
+
+- Maintain objectivity while acknowledging the inherently subjective nature of music evaluation.
+- Consider genre context when evaluating (what's innovative in classical music differs from pop).
+- Ensure your A&R Report is specific and actionable, not generic.
+- Your response MUST be in valid JSON format exactly as specified - this is critical for integration with other systems.
+- Populate all fields with meaningful values based on your expert evaluation.
+- Round all score averages to one decimal place.
+- Do not include any text outside the JSON structure.
+
+Remember that your evaluation will directly inform business decisions about whether to mint this IP or create additional content based on it, so accuracy and thoroughness are essential.`
     };
 
     // Create content parts for the API request
