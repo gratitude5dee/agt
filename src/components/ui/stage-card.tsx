@@ -1,16 +1,16 @@
 
 import React from 'react';
-import { Card, CardContent, CardProps } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card"; // Import CardContent without CardProps
 
-interface StageCardProps extends CardProps {
+interface StageCardProps extends React.ComponentPropsWithoutRef<typeof Card> {
   glowColor?: string;
   glassmorphism?: boolean;
   theatrical?: boolean;
 }
 
 export const StageCard = React.forwardRef<
-  HTMLDivElement,
+  React.ElementRef<typeof Card>,
   StageCardProps
 >(({ className, glowColor = "rgba(168,85,247,0.4)", glassmorphism = true, theatrical = true, children, ...props }, ref) => {
   return (
@@ -35,7 +35,7 @@ export const StageCard = React.forwardRef<
 StageCard.displayName = "StageCard";
 
 export const StageCardContent = React.forwardRef<
-  HTMLDivElement,
+  React.ElementRef<typeof CardContent>,
   React.ComponentPropsWithoutRef<typeof CardContent>
 >(({ className, ...props }, ref) => (
   <CardContent ref={ref} className={cn("p-4", className)} {...props} />

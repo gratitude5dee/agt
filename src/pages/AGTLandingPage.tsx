@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, X, Zap } from 'lucide-react';
@@ -63,7 +62,7 @@ const AGTLandingPage = () => {
   // Sample agents for the carousel
   const agents = [
     {
-      name: "CodeWeaver X",
+      name: "Vibezmaster", // Updated from "CodeWeaver X"
       specialty: "Generative Art Maestro",
       avatar: "/agent-1.jpg",
     },
