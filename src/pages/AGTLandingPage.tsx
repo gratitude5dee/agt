@@ -100,6 +100,7 @@ const AGTLandingPage = () => {
       <section className="relative min-h-[90vh] w-full flex flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
         {/* Background light beams */}
         <div className="absolute inset-0 bg-[#151a29] z-0 overflow-hidden">
+          {/* Light beam effects inspired by the AGT stage */}
           <div className="absolute top-0 left-[10%] w-1 h-[120%] bg-gradient-to-b from-purple-500/80 to-transparent transform rotate-[25deg] blur-[5px]"></div>
           <div className="absolute top-0 left-[25%] w-1 h-[120%] bg-gradient-to-b from-blue-500/80 to-transparent transform rotate-[15deg] blur-[5px]"></div>
           <div className="absolute top-0 left-[40%] w-2 h-[120%] bg-gradient-to-b from-yellow-400/80 to-transparent transform rotate-[35deg] blur-[8px]"></div>
@@ -119,7 +120,7 @@ const AGTLandingPage = () => {
             </p>
           </div>
 
-          {/* Vibezmaster character placeholder */}
+          {/* Vibezmaster character */}
           <div className="w-full max-w-md h-64 md:h-80 relative mb-8 flex items-center justify-center">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-48 h-48 md:w-64 md:h-64 rounded-full bg-gradient-to-r from-indigo-600 to-purple-700 opacity-75 animate-pulse"></div>
@@ -138,18 +139,18 @@ const AGTLandingPage = () => {
             )}
           </div>
 
-          {/* Access Vibez button */}
+          {/* Access Vibez button with glassmorphism and 3D hover effect */}
           <Link 
             to="/studio"
-            className="group relative overflow-hidden bg-gradient-to-r from-gray-100 to-gray-200 text-gray-900 px-8 py-4 rounded-lg text-xl font-bold tracking-wide transform transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.5)] disabled:opacity-75 disabled:hover:scale-100"
+            className="group relative overflow-hidden bg-gradient-to-r from-gray-100/10 to-gray-200/10 backdrop-blur-md text-white px-8 py-4 rounded-lg text-xl font-bold tracking-wide transform transition-all hover:scale-105 hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] border border-white/20"
           >
             <span className="relative z-10 flex items-center">
               ACCESS VIBEZ
               <Zap className="ml-2 h-5 w-5" />
             </span>
-            <span className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 group-hover:opacity-100 opacity-0 transition-opacity"></span>
-            <span className="absolute inset-0 border-2 border-white rounded-lg"></span>
-            <span className="absolute -inset-px bg-gradient-to-r from-red-500 to-purple-500 blur-[2px] opacity-25 group-hover:opacity-50 transition-opacity"></span>
+            <span className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 group-hover:opacity-100 opacity-0 transition-opacity"></span>
+            <span className="absolute inset-0 border border-white/20 rounded-lg group-hover:border-purple-500/50 transition-colors"></span>
+            <span className="absolute -inset-px bg-gradient-to-r from-purple-500 to-blue-500 blur-[2px] opacity-25 group-hover:opacity-50 transition-opacity"></span>
           </Link>
         </div>
 
@@ -198,7 +199,7 @@ const AGTLandingPage = () => {
         </div>
       </section>
 
-      {/* Meet the Agents Section */}
+      {/* Meet the Agents Section with enhanced cards */}
       <section className="relative py-16 px-4 sm:px-6 lg:px-8 bg-[#151a29]">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-gray-950 to-transparent"></div>
@@ -218,14 +219,14 @@ const AGTLandingPage = () => {
                 {agents.map((agent, index) => (
                   <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                     <div className="p-2">
-                      <Card className="bg-gray-900/70 backdrop-blur-sm border border-gray-800 hover:border-purple-500/50 transition-all">
+                      <Card className="bg-gray-900/70 backdrop-blur-sm border border-gray-800 hover:border-purple-500/50 transition-all transform hover:scale-105 hover:shadow-[0_5px_30px_rgba(168,85,247,0.2)] duration-300">
                         <CardContent className="p-4 flex flex-col items-center text-center">
-                          <div className="w-24 h-24 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-full flex items-center justify-center mb-4 overflow-hidden">
+                          <div className="w-24 h-24 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-full flex items-center justify-center mb-4 overflow-hidden transform transition-transform group-hover:scale-110">
                             <span className="text-4xl font-bold text-white">{agent.name.charAt(0)}</span>
                           </div>
                           <h3 className="text-lg font-bold text-white mb-1">{agent.name}</h3>
                           <p className="text-sm text-purple-400">{agent.specialty}</p>
-                          <Button variant="ghost" className="mt-4 text-sm text-blue-400 hover:text-blue-300">
+                          <Button variant="ghost" className="mt-4 text-sm text-blue-400 hover:text-blue-300 hover:scale-105 transition-transform">
                             View Profile
                           </Button>
                         </CardContent>
