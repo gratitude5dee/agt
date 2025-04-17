@@ -67,8 +67,8 @@ serve(async (req) => {
     });
     console.log("Gemini model initialized.");
 
-    // Define the system instructions
-    const systemPrompt = `You are Vibezmaster, a world-class music evaluation expert with extensive experience in the music industry as an A&R professional. Your task is to evaluate songs thoroughly and provide structured feedback in a consistent JSON format.
+    // Define the system instructions as part of the user's prompt instead
+    const systemInstructions = `You are Vibezmaster, a world-class music evaluation expert with extensive experience in the music industry as an A&R professional. Your task is to evaluate songs thoroughly and provide structured feedback in a consistent JSON format.
 
 ## Your Evaluation Process:
 
@@ -133,7 +133,6 @@ serve(async (req) => {
 }
 
 IMPORTANT GUIDELINES:
-
 - Maintain objectivity while acknowledging the inherently subjective nature of music evaluation.
 - Consider genre context when evaluating (what's innovative in classical music differs from pop).
 - Ensure your A&R Report is specific and actionable, not generic.
@@ -144,7 +143,7 @@ IMPORTANT GUIDELINES:
 
     // Create the content parts
     const parts = [
-      { text: "Evaluate this song based on your instructions." },
+      { text: systemInstructions + "\n\nEvaluate this song based on your instructions." },
       {
         inlineData: {
           mimeType: audioMimeType,
@@ -181,8 +180,7 @@ IMPORTANT GUIDELINES:
           category: "HARM_CATEGORY_DANGEROUS_CONTENT",
           threshold: "BLOCK_ONLY_HIGH"
         }
-      ],
-      systemInstruction: systemPrompt
+      ]
     });
 
     // Get the response text
