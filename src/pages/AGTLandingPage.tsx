@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Star, X, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -139,19 +139,18 @@ const AGTLandingPage = () => {
           </div>
 
           {/* Access Vibez button */}
-          <button 
-            onClick={handleAccessVibez}
-            disabled={isLoading}
+          <Link 
+            to="/studio"
             className="group relative overflow-hidden bg-gradient-to-r from-gray-100 to-gray-200 text-gray-900 px-8 py-4 rounded-lg text-xl font-bold tracking-wide transform transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.5)] disabled:opacity-75 disabled:hover:scale-100"
           >
             <span className="relative z-10 flex items-center">
-              {isLoading ? 'Loading...' : 'ACCESS VIBEZ'}
+              ACCESS VIBEZ
               <Zap className="ml-2 h-5 w-5" />
             </span>
             <span className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 group-hover:opacity-100 opacity-0 transition-opacity"></span>
             <span className="absolute inset-0 border-2 border-white rounded-lg"></span>
             <span className="absolute -inset-px bg-gradient-to-r from-red-500 to-purple-500 blur-[2px] opacity-25 group-hover:opacity-50 transition-opacity"></span>
-          </button>
+          </Link>
         </div>
 
         {/* 'X' markers in the background */}
