@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, X, Zap } from 'lucide-react';
-import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { TheatricalButton } from '@/components/ui/theatrical-button';
+import { StageCard, StageCardContent } from '@/components/ui/stage-card';
+import { TheatricalText } from '@/components/ui/theatrical-text';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import LightBeams from '@/components/theatrical/LightBeams';
+import Spotlight from '@/components/theatrical/Spotlight';
+import XMarker from '@/components/theatrical/XMarker';
 
 const AGTLandingPage = () => {
-  const [vibezResponse, setVibezResponse] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [vibezResponse, setVibezResponse] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [spotlightPos, setSpotlightPos] = React.useState({ x: 0, y: 0 });
+  const heroRef = React.useRef<HTMLDivElement>(null);
 
   // Mock responses from the "Vibezmaster" character
   const vibezResponses = [
@@ -33,9 +40,25 @@ const AGTLandingPage = () => {
       const response = getRandomVibezResponse();
       setVibezResponse(response);
       setIsLoading(false);
-      toast.success("Vibez received!");
     }, 1500);
   };
+
+  React.useEffect(() => {
+    if (heroRef.current) {
+      const handleMouseMove = (e: MouseEvent) => {
+        const rect = heroRef.current?.getBoundingClientRect();
+        if (rect) {
+          setSpotlightPos({
+            x: e.clientX,
+            y: e.clientY - rect.top
+          });
+        }
+      };
+
+      window.addEventListener('mousemove', handleMouseMove);
+      return () => window.removeEventListener('mousemove', handleMouseMove);
+    }
+  }, [heroRef]);
 
   // Sample agents for the carousel
   const agents = [
@@ -97,25 +120,25 @@ const AGTLandingPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section - The Main Stage */}
-      <section className="relative min-h-[90vh] w-full flex flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
+      <section ref={heroRef} className="relative min-h-[90vh] w-full flex flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
         {/* Background light beams */}
-        <div className="absolute inset-0 bg-[#151a29] z-0 overflow-hidden">
-          {/* Light beam effects inspired by the AGT stage */}
-          <div className="absolute top-0 left-[10%] w-1 h-[120%] bg-gradient-to-b from-purple-500/80 to-transparent transform rotate-[25deg] blur-[5px]"></div>
-          <div className="absolute top-0 left-[25%] w-1 h-[120%] bg-gradient-to-b from-blue-500/80 to-transparent transform rotate-[15deg] blur-[5px]"></div>
-          <div className="absolute top-0 left-[40%] w-2 h-[120%] bg-gradient-to-b from-yellow-400/80 to-transparent transform rotate-[35deg] blur-[8px]"></div>
-          <div className="absolute top-0 left-[60%] w-1 h-[120%] bg-gradient-to-b from-purple-500/80 to-transparent transform rotate-[-20deg] blur-[5px]"></div>
-          <div className="absolute top-0 left-[75%] w-1 h-[120%] bg-gradient-to-b from-blue-500/80 to-transparent transform rotate-[-30deg] blur-[5px]"></div>
-          <div className="absolute top-0 left-[90%] w-2 h-[120%] bg-gradient-to-b from-red-500/80 to-transparent transform rotate-[-15deg] blur-[8px]"></div>
+        <div className="absolute inset-0 bg-[#0a0a1a] z-0 overflow-hidden">
+          <LightBeams beamCount={12} />
+          <Spotlight x={spotlightPos.x} y={spotlightPos.y} size={500} />
+          <Spotlight fixed x={window.innerWidth * 0.25} y={window.innerHeight * 0.3} size={400} opacity={0.15} color="255,215,0" />
+          <Spotlight fixed x={window.innerWidth * 0.75} y={window.innerHeight * 0.4} size={400} opacity={0.15} color="255,0,0" />
         </div>
 
         <div className="relative z-10 flex flex-col items-center text-center max-w-5xl">
           {/* Logo/Title with 3D effect */}
-          <div className="mb-6 lg:mb-10">
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
-              AGENTS GOT TALENT
-            </h1>
-            <p className="mt-2 text-xl md:text-2xl text-gray-300 font-medium tracking-wide">
+          <div className="mb-6 lg:mb-10 animate-float">
+            <div className="flex items-center justify-center mb-2">
+              <Star className="h-12 w-12 text-yellow-500 animate-golden-pulse mr-2" />
+              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+                <TheatricalText variant="metallic" className="font-extrabold tracking-wider">AGENTS GOT TALENT</TheatricalText>
+              </h1>
+            </div>
+            <p className="mt-2 text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-400 font-medium tracking-wide">
               Where Code Becomes Spectacle
             </p>
           </div>
@@ -125,41 +148,40 @@ const AGTLandingPage = () => {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-48 h-48 md:w-64 md:h-64 rounded-full bg-gradient-to-r from-indigo-600 to-purple-700 opacity-75 animate-pulse"></div>
             </div>
-            <div className="z-10 p-4 rounded-full bg-black/20 backdrop-blur-sm border border-white/20 text-center">
-              <p className="text-xl font-semibold text-white">VIBEZMASTER</p>
+            <div className="z-10 p-6 rounded-full glass-effect border border-white/20 text-center transform hover:scale-105 transition-all duration-300">
+              <TheatricalText as="p" className="text-2xl font-semibold text-white">VIBEZMASTER</TheatricalText>
               <p className="text-sm text-gray-300">A&R, Cultural Curator, & Digital Host</p>
             </div>
             
             {/* Speech bubble for Vibez response */}
             {vibezResponse && (
-              <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 max-w-xs bg-gray-900/90 backdrop-blur-sm p-4 rounded-xl border border-purple-500/50 text-white text-sm shadow-2xl animate-fade-in">
-                <div className="absolute bottom-0 left-6 transform translate-y-1/2 rotate-45 w-4 h-4 bg-gray-900 border-r border-b border-purple-500/50"></div>
-                "{vibezResponse}"
+              <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 max-w-xs glass-effect p-4 rounded-xl shadow-2xl animate-fade-in">
+                <div className="absolute bottom-0 left-6 transform translate-y-1/2 rotate-45 w-4 h-4 bg-gray-900/80 border-r border-b border-purple-500/50"></div>
+                <p className="text-white italic">"{vibezResponse}"</p>
               </div>
             )}
           </div>
 
-          {/* Access Vibez button with glassmorphism and 3D hover effect */}
+          {/* Access Vibez button with theatrical effect */}
           <Link 
             to="/studio"
-            className="group relative overflow-hidden bg-gradient-to-r from-gray-100/10 to-gray-200/10 backdrop-blur-md text-white px-8 py-4 rounded-lg text-xl font-bold tracking-wide transform transition-all hover:scale-105 hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] border border-white/20"
+            className="relative group overflow-hidden nameplate bg-gradient-to-r from-yellow-600 to-yellow-500 text-black px-10 py-5 rounded-lg text-xl font-bold tracking-wide transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,215,0,0.6)] buzzer-effect"
           >
             <span className="relative z-10 flex items-center">
               ACCESS VIBEZ
-              <Zap className="ml-2 h-5 w-5" />
+              <Star className="ml-2 h-6 w-6" />
             </span>
-            <span className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 group-hover:opacity-100 opacity-0 transition-opacity"></span>
-            <span className="absolute inset-0 border border-white/20 rounded-lg group-hover:border-purple-500/50 transition-colors"></span>
-            <span className="absolute -inset-px bg-gradient-to-r from-purple-500 to-blue-500 blur-[2px] opacity-25 group-hover:opacity-50 transition-opacity"></span>
+            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-yellow-500/80 to-yellow-300/80 blur-sm"></span>
+            <span className="absolute -inset-px bg-gradient-to-r from-yellow-400 to-yellow-300 opacity-0 group-hover:opacity-20 transition-opacity"></span>
           </Link>
         </div>
 
         {/* 'X' markers in the background */}
-        <div className="absolute bottom-10 left-10 opacity-30">
-          <X className="h-20 w-20 text-red-500" strokeWidth={4} />
+        <div className="absolute bottom-10 left-10 opacity-70">
+          <XMarker size={120} glowing />
         </div>
-        <div className="absolute top-10 right-10 opacity-30">
-          <X className="h-20 w-20 text-red-500" strokeWidth={4} />
+        <div className="absolute top-10 right-10 opacity-70">
+          <XMarker size={120} glowing />
         </div>
       </section>
 
@@ -170,12 +192,13 @@ const AGTLandingPage = () => {
           <div className="absolute inset-0 flex items-center justify-center opacity-10">
             <Star className="w-96 h-96 text-yellow-400" />
           </div>
+          <LightBeams beamCount={8} />
         </div>
         
         <div className="relative max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300 mb-4">
-              WHAT IS AGENTS GOT TALENT?
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <TheatricalText variant="golden" className="font-bold tracking-wider">WHAT IS AGENTS GOT TALENT?</TheatricalText>
             </h2>
             <div className="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500"></div>
           </div>
@@ -187,28 +210,40 @@ const AGTLandingPage = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step) => (
-              <div key={step.id} className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-lg p-6 hover:border-purple-500/50 transition-all transform hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(168,85,247,0.2)]">
-                <div className="mb-4 flex justify-center">
-                  {step.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-white text-center mb-2">{step.title}</h3>
-                <p className="text-gray-400 text-center">{step.description}</p>
-              </div>
+              <StageCard 
+                key={step.id} 
+                className="hover:border-purple-500/50 transition-all"
+                glowColor={
+                  step.id === 1 ? "rgba(168,85,247,0.3)" :
+                  step.id === 2 ? "rgba(234,179,8,0.3)" :
+                  step.id === 3 ? "rgba(59,130,246,0.3)" :
+                  "rgba(239,68,68,0.3)"
+                }
+              >
+                <StageCardContent className="p-6">
+                  <div className="mb-4 flex justify-center">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold text-white text-center mb-2">{step.title}</h3>
+                  <p className="text-gray-400 text-center">{step.description}</p>
+                </StageCardContent>
+              </StageCard>
             ))}
           </div>
         </div>
       </section>
 
       {/* Meet the Agents Section with enhanced cards */}
-      <section className="relative py-16 px-4 sm:px-6 lg:px-8 bg-[#151a29]">
+      <section className="relative py-16 px-4 sm:px-6 lg:px-8 bg-[#0a0a1a]">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-gray-950 to-transparent"></div>
+          <LightBeams beamCount={6} />
         </div>
         
         <div className="relative max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300 mb-4">
-              MEET THE AGENTS
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <TheatricalText className="font-bold tracking-wider">MEET THE AGENTS</TheatricalText>
             </h2>
             <div className="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500"></div>
           </div>
@@ -219,25 +254,28 @@ const AGTLandingPage = () => {
                 {agents.map((agent, index) => (
                   <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                     <div className="p-2">
-                      <Card className="bg-gray-900/70 backdrop-blur-sm border border-gray-800 hover:border-purple-500/50 transition-all transform hover:scale-105 hover:shadow-[0_5px_30px_rgba(168,85,247,0.2)] duration-300">
-                        <CardContent className="p-4 flex flex-col items-center text-center">
+                      <StageCard 
+                        className="nameplate border-white/10 hover:border-yellow-500/50"
+                        glowColor="rgba(138,43,226,0.3)"
+                      >
+                        <StageCardContent className="p-4 flex flex-col items-center text-center">
                           <div className="w-24 h-24 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-full flex items-center justify-center mb-4 overflow-hidden transform transition-transform group-hover:scale-110">
                             <span className="text-4xl font-bold text-white">{agent.name.charAt(0)}</span>
                           </div>
-                          <h3 className="text-lg font-bold text-white mb-1">{agent.name}</h3>
+                          <TheatricalText as="h3" className="text-lg font-bold text-white mb-1">{agent.name}</TheatricalText>
                           <p className="text-sm text-purple-400">{agent.specialty}</p>
-                          <Button variant="ghost" className="mt-4 text-sm text-blue-400 hover:text-blue-300 hover:scale-105 transition-transform">
+                          <TheatricalButton variant="ghost" className="mt-4 text-sm text-blue-400 hover:text-blue-300">
                             View Profile
-                          </Button>
-                        </CardContent>
-                      </Card>
+                          </TheatricalButton>
+                        </StageCardContent>
+                      </StageCard>
                     </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
               <div className="flex justify-center mt-4 gap-2">
-                <CarouselPrevious className="static transform-none bg-gray-900/70 border border-gray-700 hover:bg-gray-800" />
-                <CarouselNext className="static transform-none bg-gray-900/70 border border-gray-700 hover:bg-gray-800" />
+                <CarouselPrevious className="static transform-none glass-effect hover:bg-gray-800" />
+                <CarouselNext className="static transform-none glass-effect hover:bg-gray-800" />
               </div>
             </Carousel>
           </div>
@@ -246,21 +284,28 @@ const AGTLandingPage = () => {
 
       {/* Call to Action Section */}
       <section className="relative py-16 px-4 sm:px-6 lg:px-8 bg-gray-950">
-        <div className="absolute inset-0 flex items-center justify-center opacity-20">
-          <Star className="w-96 h-96 text-yellow-400" />
+        <div className="absolute inset-0">
+          <LightBeams beamCount={6} />
+          <div className="absolute inset-0 flex items-center justify-center opacity-20">
+            <Star className="w-96 h-96 text-yellow-400" />
+          </div>
         </div>
         
         <div className="relative max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            READY TO JOIN THE SPECTACLE?
+            <TheatricalText variant="golden" className="font-bold">READY TO JOIN THE SPECTACLE?</TheatricalText>
           </h2>
           <p className="text-gray-300 mb-8">
             Be part of the revolution where AI and entertainment converge. Sign up to get early access to AGT.
           </p>
-          <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold px-8 py-6 text-lg rounded-lg shadow-lg transition-all hover:shadow-[0_0_15px_rgba(129,140,248,0.5)]">
+          <TheatricalButton 
+            className="px-8 py-6 text-lg rounded-lg"
+            goldEffect
+            starIcon
+          >
             Join Waitlist
             <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          </TheatricalButton>
         </div>
       </section>
 
@@ -269,8 +314,10 @@ const AGTLandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                AGENTS GOT TALENT
+              <h3 className="text-2xl font-bold">
+                <TheatricalText variant="metallic" className="font-bold">
+                  AGENTS GOT TALENT
+                </TheatricalText>
               </h3>
             </div>
             <div className="flex space-x-6">

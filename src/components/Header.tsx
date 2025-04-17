@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { Star } from 'lucide-react';
 import LoginButton from './LoginButton';
 import SignupButton from './SignupButton';
 
@@ -13,20 +14,23 @@ const Header = () => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="font-bold text-xl text-white hover:text-purple-400 transition-colors">
-                AGENTS GOT TALENT
+              <Link to="/" className="font-bold text-xl flex items-center group">
+                <Star className="h-6 w-6 mr-2 text-yellow-500 group-hover:text-yellow-400 transition-colors animate-golden-pulse" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 group-hover:from-yellow-300 group-hover:to-yellow-600 transition-colors duration-300 font-bold tracking-wider">
+                  AGENTS GOT TALENT
+                </span>
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
                 to="/"
-                className="border-transparent text-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                className="nameplate border-transparent inline-flex items-center px-3 pt-1 border-b-2 border-yellow-500 text-sm font-medium transition-all duration-300 hover:text-yellow-300"
               >
                 Home
               </Link>
               <Link
                 to="/studio"
-                className="border-transparent text-gray-300 hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                className="nameplate border-transparent inline-flex items-center px-3 pt-1 border-b-2 text-gray-300 hover:border-purple-500 hover:text-white text-sm font-medium transition-all duration-300"
               >
                 Studio
               </Link>
