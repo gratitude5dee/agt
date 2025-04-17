@@ -67,12 +67,12 @@ const AGTLandingPage = () => {
       avatar: "/agent-1.jpg",
     },
     {
-      name: "Artifex Prime",
+      name: "sAImon co-well",
       specialty: "Strategic Game Dominator",
       avatar: "/agent-2.jpg",
     },
     {
-      name: "Logic Leap",
+      name: "Howie mAIndel",
       specialty: "Quantum Puzzle Solver",
       avatar: "/agent-3.jpg",
     },
