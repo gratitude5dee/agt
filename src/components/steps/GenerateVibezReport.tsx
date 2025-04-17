@@ -9,7 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 interface GenerateVibezReportProps {
   songFile: File;
   onChooseMint: (shouldMint: boolean) => void;
-  onCancel: () => void; // New prop to handle cancelling/returning to upload
+  onCancel: () => void; // Prop to handle cancelling/returning to upload
 }
 
 interface ScoreData {
@@ -51,15 +51,19 @@ const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({
   const [loading, setLoading] = useState(true);
   const [reportData, setReportData] = useState<EvaluationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     const generateReport = async () => {
       try {
         setLoading(true);
+        setError(null);
         
         // Create a form data object to send the file
         const formData = new FormData();
         formData.append('songFile', songFile);
+        
+        console.log(`Attempting to evaluate song: ${songFile.name}, size: ${songFile.size}, type: ${songFile.type}`);
         
         // Call the Supabase Edge Function with appropriate error handling
         try {
@@ -72,23 +76,41 @@ const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({
             throw new Error(`Error calling evaluate-song function: ${error.message}`);
           }
           
+          console.log("Received evaluation response:", data);
+          
           // Handle the response
           if (data && data.evaluation) {
             setReportData(data as EvaluationResult);
           } else {
             console.error("Invalid response format:", data);
-            throw new Error('Invalid response data format');
+            throw new Error('Invalid response data format - missing evaluation data');
           }
-        } catch (functionError) {
+        } catch (functionError: any) {
           console.error("Function invocation error:", functionError);
-          throw functionError;
+          // More specific error message
+          if (functionError.message && functionError.message.includes('status code')) {
+            throw new Error(`Error from evaluate-song function: Response error ${functionError.message}`);
+          } else {
+            throw functionError;
+          }
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error generating report:', err);
         setError(err instanceof Error ? err.message : 'Unknown error occurred');
         toast.error('Failed to generate report', {
           description: err instanceof Error ? err.message : 'Please try again later',
         });
+        
+        // Auto-retry once if there's an error (but not more than once)
+        if (retryCount === 0) {
+          setRetryCount(prevCount => prevCount + 1);
+          toast.info('Retrying evaluation...', {
+            description: 'Automatically retrying the song evaluation',
+          });
+          setTimeout(() => {
+            generateReport();
+          }, 2000);
+        }
       } finally {
         setLoading(false);
       }
@@ -97,7 +119,7 @@ const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({
     if (songFile) {
       generateReport();
     }
-  }, [songFile]);
+  }, [songFile, retryCount]);
 
   const formatScoreData = () => {
     if (!reportData) return {};
@@ -115,6 +137,17 @@ const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({
         ? "Strong candidate for minting" 
         : "Not recommended for minting"
     };
+  };
+
+  const handleRetry = () => {
+    setRetryCount(0); // Reset retry count
+    setError(null);
+    setLoading(true);
+    // Force a re-render to trigger the useEffect again
+    setTimeout(() => {
+      setLoading(false);
+      setLoading(true);
+    }, 100);
   };
 
   return (
@@ -149,7 +182,7 @@ const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({
           <div className="text-center py-10">
             <p className="text-red-400 mb-4">{error}</p>
             <Button 
-              onClick={() => window.location.reload()}
+              onClick={handleRetry}
               variant="outline"
               className="border-gray-600 text-gray-300 hover:bg-gray-700"
             >
@@ -225,7 +258,7 @@ const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({
                   <Check className="mr-2 h-4 w-4" /> Yes, mint my IP
                 </Button>
                 <Button 
-                  onClick={onCancel}  // Use the new onCancel prop
+                  onClick={onCancel}
                   variant="outline" 
                   className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-700"
                 >
