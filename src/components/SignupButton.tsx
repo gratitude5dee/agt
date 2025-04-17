@@ -5,7 +5,7 @@ import WalletWrapper from './WalletWrapper';
 export default function SignupButton() {
   return (
     <WalletWrapper
-      className="min-w-[90px] shrink"
+      className="min-w-[90px] h-8 shrink"
       text="Sign up"
     />
   );

@@ -33,10 +33,10 @@ export default function WalletWrapper({
       <Wallet>
         <ConnectWallet
           text={text}
-          className={`bg-gray-800/60 hover:bg-gray-700/60 text-white border border-gray-700/50 ${className || ''}`}
+          className={`bg-gray-800/60 hover:bg-gray-700/60 text-white border border-gray-700/50 h-8 py-0 ${className || ''}`}
         >
-          <Avatar className="h-6 w-6" />
-          <Name />
+          <Avatar className="h-5 w-5" />
+          <Name className="text-sm" />
         </ConnectWallet>
         <WalletDropdown>
           <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick={true}>
