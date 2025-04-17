@@ -2,53 +2,73 @@
 import { serve } from "https://deno.land/std@0.170.0/http/server.ts";
 import { GoogleGenerativeAI } from "https://esm.sh/@google/generative-ai@0.2.1";
 
+// Import Buffer for base64 encoding in Deno
+import { Buffer } from "https://deno.land/std@0.170.0/node/buffer.ts";
+
 // CORS headers for browser clients
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Helper function for base64 conversion in Deno
+function btoa(str: string): string {
+  return Buffer.from(str, 'binary').toString('base64');
+}
+
 serve(async (req) => {
+  console.log(`Received request: ${req.method} ${req.url}`);
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
+    console.log("Responding to OPTIONS request");
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const apiKey = Deno.env.get("GEMINI_API_KEY");
     if (!apiKey) {
+      console.error("GEMINI_API_KEY environment variable is missing!");
       throw new Error("Missing GEMINI_API_KEY environment variable");
     }
+    console.log("GEMINI_API_KEY found.");
 
     // Parse the multipart form data from the request
+    console.log("Attempting to parse FormData...");
     const formData = await req.formData();
+    console.log("FormData parsed.");
+
     const songFile = formData.get("songFile");
-    
     if (!songFile || !(songFile instanceof File)) {
+      console.error("songFile not found in FormData or is not a File object.");
       throw new Error("Missing or invalid songFile in form data");
     }
+    console.log(`Received songFile: name=${songFile.name}, size=${songFile.size}, type=${songFile.type}`);
 
     // Get the file bytes and MIME type
+    console.log("Reading song file into ArrayBuffer...");
     const audioBytes = await songFile.arrayBuffer();
     const audioMimeType = songFile.type || "audio/mpeg"; // Default to audio/mpeg if type is missing
-    
+    console.log(`Audio read: ${audioBytes.byteLength} bytes, MIME type: ${audioMimeType}`);
+
     // Convert array buffer to base64
+    console.log("Converting audio to base64...");
     const audioBase64 = btoa(
       new Uint8Array(audioBytes).reduce((data, byte) => data + String.fromCharCode(byte), '')
     );
+    console.log("Audio converted to base64.");
 
     // Initialize the Gemini API client
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Get the model
+    // Get the model - using the most recent stable version
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-pro-preview-03-25",
+      model: "gemini-1.5-pro",
     });
-    
-    // Prepare the system instruction
-    const systemInstruction = [
-      {
-        text: `You are Vibezmaster, a world-class music evaluation expert with extensive experience in the music industry as an A&R professional. Your task is to evaluate songs thoroughly and provide structured feedback in a consistent JSON format.
+    console.log("Gemini model initialized.");
+
+    // Define the system instructions
+    const systemPrompt = `You are Vibezmaster, a world-class music evaluation expert with extensive experience in the music industry as an A&R professional. Your task is to evaluate songs thoroughly and provide structured feedback in a consistent JSON format.
 
 ## Your Evaluation Process:
 
@@ -85,7 +105,6 @@ serve(async (req) => {
 
 7. FORMAT your entire response as a valid JSON object with the following structure:
 
-\`\`\`json
 {
   "evaluation": {
     "scores": {
@@ -112,7 +131,6 @@ serve(async (req) => {
     }
   }
 }
-\`\`\`
 
 IMPORTANT GUIDELINES:
 
@@ -122,33 +140,24 @@ IMPORTANT GUIDELINES:
 - Your response MUST be in valid JSON format exactly as specified - this is critical for integration with other systems.
 - Populate all fields with meaningful values based on your expert evaluation.
 - Round all score averages to one decimal place.
-- Do not include any text outside the JSON structure.
-
-Remember that your evaluation will directly inform business decisions about whether to mint this IP or create additional content based on it, so accuracy and thoroughness are essential.`
-      }
-    ];
+- Do not include any text outside the JSON structure.`;
 
     // Create the content parts
-    const contents = [
+    const parts = [
+      { text: "Evaluate this song based on your instructions." },
       {
-        role: "user",
-        parts: [
-          { text: "Evaluate this song based on your instructions." },
-          {
-            inlineData: {
-              mimeType: audioMimeType,
-              data: audioBase64
-            }
-          }
-        ]
+        inlineData: {
+          mimeType: audioMimeType,
+          data: audioBase64
+        }
       }
     ];
 
     console.log("Sending request to Gemini API...");
     
-    // Generate content - using correct structure for Gemini API
+    // Generate content
     const result = await model.generateContent({
-      contents,
+      contents: [{ role: "user", parts }],
       generationConfig: {
         temperature: 0.2,
         topK: 32,
@@ -173,31 +182,69 @@ Remember that your evaluation will directly inform business decisions about whet
           threshold: "BLOCK_ONLY_HIGH"
         }
       ],
-      systemInstruction
+      systemInstruction: systemPrompt
     });
 
     // Get the response text
     const responseText = result.response.text();
     console.log("Received response from Gemini API");
+    console.log("Raw response:", responseText.substring(0, 500) + "..."); // Log first 500 chars
     
     // Extract JSON from response text
     // Sometimes Gemini wraps the JSON in markdown code blocks or adds extra text
-    let jsonMatch;
-    if (responseText.includes('```json')) {
-      // Extract content between ```json and ``` markers
-      jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
-    } else if (responseText.includes('{')) {
-      // Try to extract anything that looks like a JSON object
-      jsonMatch = responseText.match(/{[\s\S]*}/);
+    let jsonData;
+    try {
+      // First try direct JSON parsing
+      jsonData = JSON.parse(responseText);
+      console.log("Direct JSON parsing successful");
+    } catch (parseError) {
+      console.log("Direct JSON parsing failed, trying to extract JSON...");
+      
+      // Try to extract JSON from markdown code blocks
+      if (responseText.includes('```json')) {
+        const match = responseText.match(/```json\s*([\s\S]*?)\s*```/);
+        if (match && match[1]) {
+          try {
+            jsonData = JSON.parse(match[1].trim());
+            console.log("Extracted JSON from code block successfully");
+          } catch (error) {
+            console.error("Failed to parse JSON from code block:", error);
+            throw new Error("Invalid JSON response from Gemini (code block extraction failed)");
+          }
+        } else {
+          console.error("JSON code block found but couldn't extract content");
+          throw new Error("Failed to extract JSON from Gemini response code block");
+        }
+      } 
+      // Try to find anything that looks like a JSON object
+      else if (responseText.includes('{') && responseText.includes('}')) {
+        try {
+          const firstBrace = responseText.indexOf('{');
+          const lastBrace = responseText.lastIndexOf('}');
+          if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+            const jsonStr = responseText.substring(firstBrace, lastBrace + 1);
+            jsonData = JSON.parse(jsonStr);
+            console.log("Extracted JSON from braces successfully");
+          } else {
+            throw new Error("Invalid JSON structure");
+          }
+        } catch (error) {
+          console.error("Failed to extract and parse JSON:", error);
+          throw new Error("Invalid JSON response from Gemini (extraction failed)");
+        }
+      } else {
+        console.error("No JSON-like structure found in response");
+        throw new Error("Gemini response does not contain valid JSON");
+      }
     }
 
-    if (!jsonMatch) {
-      throw new Error("Could not extract JSON from Gemini response");
+    // Validate the extracted JSON has the expected structure
+    if (!jsonData || !jsonData.evaluation) {
+      console.error("JSON response missing expected structure", jsonData);
+      throw new Error("Invalid JSON structure from Gemini");
     }
 
-    const jsonStr = jsonMatch[1] || jsonMatch[0];
-    const jsonData = JSON.parse(jsonStr);
-
+    console.log("Successfully processed evaluation");
     return new Response(
       JSON.stringify(jsonData),
       { 
@@ -210,7 +257,8 @@ Remember that your evaluation will directly inform business decisions about whet
     
     return new Response(
       JSON.stringify({ 
-        error: error.message || "An error occurred during song evaluation" 
+        error: error.message || "An error occurred during song evaluation",
+        details: error.stack || "No stack trace available"
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
