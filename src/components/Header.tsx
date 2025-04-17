@@ -24,13 +24,13 @@ const Header = () => {
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
                 to="/"
-                className="nameplate border-transparent inline-flex items-center px-3 pt-1 border-b-2 border-yellow-500 text-sm font-medium transition-all duration-300 hover:text-yellow-300"
+                className="judge-nameplate inline-flex items-center px-3 pt-1 border-b-2 border-yellow-500 text-sm font-medium transition-all duration-300 hover:text-yellow-300 nameplate-shine"
               >
                 Home
               </Link>
               <Link
                 to="/studio"
-                className="nameplate border-transparent inline-flex items-center px-3 pt-1 border-b-2 text-gray-300 hover:border-purple-500 hover:text-white text-sm font-medium transition-all duration-300"
+                className="judge-nameplate inline-flex items-center px-3 pt-1 border-b-2 border-transparent hover:border-purple-500 hover:text-white text-sm font-medium transition-all duration-300 nameplate-shine"
               >
                 Studio
               </Link>

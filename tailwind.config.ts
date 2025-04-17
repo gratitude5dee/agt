@@ -63,12 +63,22 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				agt: {
+					dark: 'hsl(var(--agt-dark))',
+					red: 'hsl(var(--agt-red))',
+					blue: 'hsl(var(--agt-blue))',
+					gold: 'hsl(var(--agt-gold))',
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			letterSpacing: {
+				'widest': '0.2em',
+				'superwide': '0.3em'
 			},
 			keyframes: {
 				'accordion-down': {
@@ -91,7 +101,10 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+			},
+			backgroundImage: {
+        'led-pattern': "repeating-linear-gradient(0deg, rgba(27, 117, 188, 0.1) 0px, rgba(27, 117, 188, 0.05) 1px, transparent 1px, transparent 2px), repeating-linear-gradient(90deg, rgba(27, 117, 188, 0.1) 0px, rgba(27, 117, 188, 0.05) 1px, transparent 1px, transparent 2px)"
+      }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

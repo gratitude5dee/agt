@@ -8,15 +8,33 @@ interface XMarkerProps {
   glowing?: boolean;
   className?: string;
   strokeWidth?: number;
+  agtStyle?: boolean;
 }
 
 const XMarker: React.FC<XMarkerProps> = ({
   size = 100,
-  color = "#ff1e00",
+  color = "#E31937",
   glowing = true,
   className = "",
-  strokeWidth = 8
+  strokeWidth = 8,
+  agtStyle = true
 }) => {
+  if (agtStyle) {
+    return (
+      <div 
+        className={cn(
+          "relative agt-x-buzzer", 
+          glowing && "animate-x-glow", 
+          className
+        )}
+        style={{ 
+          width: size, 
+          height: size
+        }}
+      />
+    );
+  }
+  
   return (
     <div 
       className={cn(
