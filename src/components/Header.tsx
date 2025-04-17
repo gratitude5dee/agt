@@ -1,13 +1,14 @@
+
 import { Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { Star } from 'lucide-react';
 import LoginButton from './LoginButton';
 import SignupButton from './SignupButton';
+
 const Header = () => {
-  const {
-    address
-  } = useAccount();
-  return <header className="bg-gray-900/40 backdrop-blur-md border-b border-gray-800/50 sticky top-0 z-50">
+  const { address } = useAccount();
+  return (
+    <header className="bg-gray-900/40 backdrop-blur-md border-b border-gray-800/50 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-14">
           <div className="flex">
@@ -23,7 +24,7 @@ const Header = () => {
               <Link to="/" className="judge-nameplate inline-flex items-center pt-1 border-b-2 border-yellow-500 text-sm font-medium transition-all duration-300 hover:text-yellow-300 nameplate-shine py-0 px-[16px] my-[8px]">
                 Home
               </Link>
-              <Link to="/studio" className="judge-nameplate inline-flex items-center pt-1 border-b-2 border-transparent hover:border-purple-500 hover:text-white text-sm font-medium transition-all duration-300 nameplate-shine py-[13px] my-[9px] px-[20px]">
+              <Link to="/studio" className="judge-nameplate inline-flex items-center justify-center pt-1 border-b-2 border-transparent hover:border-purple-500 hover:text-white text-sm font-medium transition-all duration-300 nameplate-shine py-[13px] my-[9px] px-[20px]">
                 Studio
               </Link>
             </div>
@@ -38,6 +39,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-    </header>;
+    </header>
+  );
 };
 export default Header;
