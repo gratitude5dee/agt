@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { FileText, Check, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -45,7 +46,7 @@ interface EvaluationResult {
 const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({ 
   songFile, 
   onChooseMint, 
-  onCancel  // Add the new prop
+  onCancel
 }) => {
   const [loading, setLoading] = useState(true);
   const [reportData, setReportData] = useState<EvaluationResult | null>(null);
@@ -60,20 +61,27 @@ const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({
         const formData = new FormData();
         formData.append('songFile', songFile);
         
-        // Call the Supabase Edge Function
-        const { data, error } = await supabase.functions.invoke('evaluate-song', {
-          body: formData,
-        });
-        
-        if (error) {
-          throw new Error(`Error calling evaluate-song function: ${error.message}`);
-        }
-        
-        // Handle the response
-        if (data && data.evaluation) {
-          setReportData(data as EvaluationResult);
-        } else {
-          throw new Error('Invalid response data format');
+        // Call the Supabase Edge Function with appropriate error handling
+        try {
+          const { data, error } = await supabase.functions.invoke('evaluate-song', {
+            body: formData,
+          });
+          
+          if (error) {
+            console.error("Supabase function error:", error);
+            throw new Error(`Error calling evaluate-song function: ${error.message}`);
+          }
+          
+          // Handle the response
+          if (data && data.evaluation) {
+            setReportData(data as EvaluationResult);
+          } else {
+            console.error("Invalid response format:", data);
+            throw new Error('Invalid response data format');
+          }
+        } catch (functionError) {
+          console.error("Function invocation error:", functionError);
+          throw functionError;
         }
       } catch (err) {
         console.error('Error generating report:', err);
