@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Wand2 } from 'lucide-react';
+import { Wand2, ArrowLeft } from 'lucide-react';
 import { useAccount } from 'wagmi';
+import { useNavigate } from 'react-router-dom';
 import WalletWrapper from '@/components/WalletWrapper';
 import StepIndicator from '@/components/steps/StepIndicator';
 import UploadSong from '@/components/steps/UploadSong';
 import GenerateVibezReport from '@/components/steps/GenerateVibezReport';
 import GenerateMusicVideo from '@/components/steps/GenerateMusicVideo';
 import MintIP from '@/components/steps/MintIP';
+import { TheatricalButton } from '@/components/ui/theatrical-button';
 
 type Step = {
   id: number;
@@ -16,6 +18,7 @@ type Step = {
 
 const HomePage = () => {
   const { address } = useAccount();
+  const navigate = useNavigate();
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [songFile, setSongFile] = useState<File | null>(null);
   const [shouldMint, setShouldMint] = useState(false);
@@ -103,6 +106,18 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col items-center">
+      {/* Back Button */}
+      <div className="self-start mb-6">
+        <TheatricalButton 
+          variant="default"
+          className="px-4 py-2 text-white hover:text-gray-200 transition-colors glassmorphism"
+          onClick={() => navigate('/')}
+        >
+          <ArrowLeft className="mr-2" />
+          Back to Home
+        </TheatricalButton>
+      </div>
+
       {/* Page Title Section */}
       <div className="text-center mb-12 mt-8">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">VIBEZMASTER</h1>
