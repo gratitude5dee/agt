@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { FileText, Check, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 interface GenerateVibezReportProps {
   songFile: File;
   onChooseMint: (shouldMint: boolean) => void;
+  onCancel: () => void; // New prop to handle cancelling/returning to upload
 }
 
 interface ScoreData {
@@ -42,7 +42,11 @@ interface EvaluationResult {
   }
 }
 
-const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({ songFile, onChooseMint }) => {
+const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({ 
+  songFile, 
+  onChooseMint, 
+  onCancel  // Add the new prop
+}) => {
   const [loading, setLoading] = useState(true);
   const [reportData, setReportData] = useState<EvaluationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -213,7 +217,7 @@ const GenerateVibezReport: React.FC<GenerateVibezReportProps> = ({ songFile, onC
                   <Check className="mr-2 h-4 w-4" /> Yes, mint my IP
                 </Button>
                 <Button 
-                  onClick={() => onChooseMint(false)}
+                  onClick={onCancel}  // Use the new onCancel prop
                   variant="outline" 
                   className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-700"
                 >

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Wand2 } from 'lucide-react';
 import { useAccount } from 'wagmi';
@@ -55,14 +54,19 @@ const HomePage = () => {
   };
 
   const handleVideoComplete = () => {
-    if (shouldMint) {
-      setCurrentStepIndex(3); // Move to Mint IP step
-    }
+    // Reset the flow or show a completion screen
+    console.log("Minting complete");
   };
 
   const handleMintComplete = () => {
     // Reset the flow or show a completion screen
     console.log("Minting complete");
+  };
+
+  // New method to handle returning to upload song
+  const handleCancelVibezReport = () => {
+    setSongFile(null); // Reset song file
+    setCurrentStepIndex(0); // Return to upload song step
   };
 
   const renderCurrentStep = () => {
@@ -81,7 +85,13 @@ const HomePage = () => {
       case 0:
         return <UploadSong onComplete={handleUploadComplete} />;
       case 1:
-        return songFile && <GenerateVibezReport songFile={songFile} onChooseMint={handleChooseMint} />;
+        return songFile && (
+          <GenerateVibezReport 
+            songFile={songFile} 
+            onChooseMint={handleChooseMint}
+            onCancel={handleCancelVibezReport}  // Pass the new cancel handler
+          />
+        );
       case 2:
         return songFile && <GenerateMusicVideo songFile={songFile} onComplete={handleVideoComplete} />;
       case 3:
