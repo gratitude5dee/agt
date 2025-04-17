@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Wand2, ArrowLeft, Mic, Sparkles } from 'lucide-react';
 import { useAccount } from 'wagmi';
@@ -115,15 +114,28 @@ const HomePage = () => {
         <LightBeams beamCount={8} intensity="low" agtStyle={false} />
       </div>
       
-      {/* Back Button */}
+      {/* Back Button with enhanced design */}
       <div className="self-start mb-6 z-10">
         <TheatricalButton 
           variant="default"
-          className="px-4 py-2 text-white hover:text-gray-200 transition-all duration-300 backdrop-blur-md bg-gray-800/30 border border-gray-700/30 shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:scale-105 hover:shadow-[0_0_20px_rgba(108,92,231,0.3)]"
+          className="group relative px-5 py-2.5 text-white/90 hover:text-white transition-all duration-500 
+            backdrop-blur-md bg-gradient-to-r from-premium-purple/20 to-premium-navy/20 
+            border border-white/10 
+            shadow-[0_4px_15px_rgba(108,92,231,0.2)] 
+            hover:shadow-[0_8px_25px_rgba(108,92,231,0.4)]
+            hover:border-white/20
+            hover:-translate-y-0.5"
           onClick={() => navigate('/')}
         >
-          <ArrowLeft className="mr-2 transition-transform group-hover:-translate-x-1" />
-          Back to Home
+          <div className="flex items-center gap-2">
+            <ArrowLeft className="w-4 h-4 transition-transform duration-500 group-hover:-translate-x-1" />
+            <span className="font-medium tracking-wide">Back to Home</span>
+          </div>
+          <div className="absolute inset-0 rounded-md overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#6C5CE7]/5 to-[#00D2FF]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#6C5CE7]/0 via-[#6C5CE7]/10 to-[#6C5CE7]/0 
+              opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" />
+          </div>
         </TheatricalButton>
       </div>
 

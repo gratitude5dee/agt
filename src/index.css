@@ -659,3 +659,11 @@
 .rounded-premium-sm {
   border-radius: 4px;
 }
+
+/* Premium UI Colors */
+:root {
+  --premium-purple: #6C5CE7;
+  --premium-navy: #2D3748;
+  --premium-electric: #00D2FF;
+  --premium-magenta: #FF00E5;
+}
