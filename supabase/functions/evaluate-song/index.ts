@@ -20,12 +20,6 @@ serve(async (req) => {
       throw new Error("Missing GEMINI_API_KEY environment variable");
     }
 
-    // Initialize the Google GenAI client
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-pro-preview-03-25",
-    });
-
     // Parse the multipart form data from the request
     const formData = await req.formData();
     const songFile = formData.get("songFile");
@@ -43,8 +37,18 @@ serve(async (req) => {
       new Uint8Array(audioBytes).reduce((data, byte) => data + String.fromCharCode(byte), '')
     );
 
-    // System instructions for the Gemini model
-    const systemPrompt = `You are Vibezmaster, a world-class music evaluation expert with extensive experience in the music industry as an A&R professional. Your task is to evaluate songs thoroughly and provide structured feedback in a consistent JSON format.
+    // Initialize the Google GenAI client based on the example code
+    const genAI = new GoogleGenerativeAI(apiKey);
+    
+    // Configure the model options as shown in the example
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-pro-preview-03-25",
+    });
+    
+    // Define the system instruction
+    const systemInstruction = [
+      {
+        text: `You are Vibezmaster, a world-class music evaluation expert with extensive experience in the music industry as an A&R professional. Your task is to evaluate songs thoroughly and provide structured feedback in a consistent JSON format.
 
 ## Your Evaluation Process:
 
@@ -120,66 +124,59 @@ IMPORTANT GUIDELINES:
 - Round all score averages to one decimal place.
 - Do not include any text outside the JSON structure.
 
-Remember that your evaluation will directly inform business decisions about whether to mint this IP or create additional content based on it, so accuracy and thoroughness are essential.`;
-
-    // Create content parts for the API request
-    const parts = [
-      { text: "Evaluate this song based on your instructions." },
-      { 
-        inlineData: { 
-          mimeType: audioMimeType, 
-          data: audioBase64 
-        } 
+Remember that your evaluation will directly inform business decisions about whether to mint this IP or create additional content based on it, so accuracy and thoroughness are essential.`
       }
     ];
 
-    // Configure the generation request with the correct parameter structure
-    // Note: We're using the proper parameters according to the Gemini API docs
-    const generationConfig = {
-      temperature: 0.2,
+    // Create the request config
+    const config = {
+      responseMimeType: 'text/plain',
+      systemInstruction: systemInstruction,
     };
+    
+    // Create content parts similar to the example
+    const contents = [
+      {
+        role: 'user',
+        parts: [
+          {
+            text: "Evaluate this song based on your instructions.",
+          },
+          {
+            inlineData: {
+              mimeType: audioMimeType,
+              data: audioBase64
+            }
+          }
+        ],
+      },
+    ];
 
     console.log("Sending request to Gemini API...");
-    const result = await model.generateContent({
-      contents: [{ 
-        role: "user", 
-        parts: parts 
-      }],
-      generationConfig,
-      safetySettings: [
-        {
-          category: "HARM_CATEGORY_HATE_SPEECH",
-          threshold: "BLOCK_NONE"
-        },
-        {
-          category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-          threshold: "BLOCK_NONE"
-        },
-        {
-          category: "HARM_CATEGORY_HARASSMENT",
-          threshold: "BLOCK_NONE"
-        },
-        {
-          category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-          threshold: "BLOCK_NONE"
-        }
-      ],
-      systemInstruction: systemPrompt,
+    
+    // Generate content as shown in the example
+    const response = await model.generateContentStream({
+      model: "gemini-2.5-pro-preview-03-25",
+      config: config,
+      contents: contents,
     });
 
-    // Extract and parse the response text as JSON
-    const responseText = result.response.text();
+    // Collect all chunks to build complete response
+    let fullResponse = "";
+    for await (const chunk of response) {
+      fullResponse += chunk.text();
+    }
     console.log("Received response from Gemini API");
     
     // Extract JSON from response text
     // Sometimes Gemini wraps the JSON in markdown code blocks or adds extra text
     let jsonMatch;
-    if (responseText.includes('```json')) {
+    if (fullResponse.includes('```json')) {
       // Extract content between ```json and ``` markers
-      jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
-    } else if (responseText.includes('{')) {
+      jsonMatch = fullResponse.match(/```json\s*([\s\S]*?)\s*```/);
+    } else if (fullResponse.includes('{')) {
       // Try to extract anything that looks like a JSON object
-      jsonMatch = responseText.match(/{[\s\S]*}/);
+      jsonMatch = fullResponse.match(/{[\s\S]*}/);
     }
 
     if (!jsonMatch) {
