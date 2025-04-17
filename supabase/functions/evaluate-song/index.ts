@@ -44,8 +44,7 @@ serve(async (req) => {
     );
 
     // System instructions for the Gemini model
-    const systemInstruction = {
-      text: `You are Vibezmaster, a world-class music evaluation expert with extensive experience in the music industry as an A&R professional. Your task is to evaluate songs thoroughly and provide structured feedback in a consistent JSON format.
+    const systemPrompt = `You are Vibezmaster, a world-class music evaluation expert with extensive experience in the music industry as an A&R professional. Your task is to evaluate songs thoroughly and provide structured feedback in a consistent JSON format.
 
 ## Your Evaluation Process:
 
@@ -121,8 +120,7 @@ IMPORTANT GUIDELINES:
 - Round all score averages to one decimal place.
 - Do not include any text outside the JSON structure.
 
-Remember that your evaluation will directly inform business decisions about whether to mint this IP or create additional content based on it, so accuracy and thoroughness are essential.`
-    };
+Remember that your evaluation will directly inform business decisions about whether to mint this IP or create additional content based on it, so accuracy and thoroughness are essential.`;
 
     // Create content parts for the API request
     const parts = [
@@ -135,17 +133,38 @@ Remember that your evaluation will directly inform business decisions about whet
       }
     ];
 
-    // Configure the generation request
+    // Configure the generation request with the correct parameter structure
+    // Note: We're using the proper parameters according to the Gemini API docs
     const generationConfig = {
       temperature: 0.2,
-      responseMimeType: 'text/plain',
-      systemInstruction: systemInstruction,
     };
 
     console.log("Sending request to Gemini API...");
     const result = await model.generateContent({
-      contents: [{ role: "user", parts }],
+      contents: [{ 
+        role: "user", 
+        parts: parts 
+      }],
       generationConfig,
+      safetySettings: [
+        {
+          category: "HARM_CATEGORY_HATE_SPEECH",
+          threshold: "BLOCK_NONE"
+        },
+        {
+          category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+          threshold: "BLOCK_NONE"
+        },
+        {
+          category: "HARM_CATEGORY_HARASSMENT",
+          threshold: "BLOCK_NONE"
+        },
+        {
+          category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+          threshold: "BLOCK_NONE"
+        }
+      ],
+      systemInstruction: systemPrompt,
     });
 
     // Extract and parse the response text as JSON
