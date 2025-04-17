@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Upload, Music, FileMusic, FileAudio, Mic } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
@@ -131,7 +130,7 @@ const UploadSong: React.FC<UploadSongProps> = ({ onComplete }) => {
                 Drag & Drop your audio file
               </h3>
               <TheatricalButton
-                variant="primary"
+                variant="default"  // Changed from "primary" to "default"
                 className="mb-4 px-5 py-2 bg-gradient-to-r from-[#6C5CE7] to-[#6050DC] hover:from-[#7D6EF5] hover:to-[#6C5CE7] text-white border-none shadow-[0_4px_10px_rgba(108,92,231,0.3)] hover:shadow-[0_6px_15px_rgba(108,92,231,0.5)] transition-all duration-300 transform hover:translate-y-[-2px]"
               >
                 <Upload className="mr-2 h-4 w-4" />
